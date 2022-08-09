@@ -16,4 +16,13 @@ router.post('/', async (req, res) => {
 
 // get all courses
 
+router.get('/', async (req, res) => {
+    try {
+        const courses = await Course.find();
+        res.status(200).json(courses);
+    } catch (err) {
+        res.status(500).json(err);
+    }
+})
+
 module.exports = router;

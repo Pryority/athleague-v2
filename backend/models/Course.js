@@ -4,32 +4,37 @@ const { Schema, model } = mongoose;
 const courseSchema = new Schema({
     username: {
         type: String,
-        required: true
+        require: true
     },
     title: {
         type: String,
-        required: true,
+        require: true,
         min: 3,
         max: 20,
     },
+    // tags: {
+    //     type: [String],
+    //     require: true,
+    //     enum: ['sports', 'racing', 'action', 'rpg']
+    // },
     desc: {
         type: String,
-        required: true,
+        require: true,
         min: 3,
     },
     rating: {
         type: Number,
-        required: true,
+        require: true,
         min: 0,
         max: 5
     },
     lat: {
         type: Number,
-        required: true
+        require: true
     },
     long: {
         type: Number,
-        required: true
+        require: true
     }
 },
     { timestamps: true }

@@ -1,4 +1,3 @@
-import './App.css';
 import OnboardCarousel from './components/Onboarding/OnboardCarousel';
 import CourseNav from './CourseNav/CourseNav';
 

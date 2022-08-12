@@ -17,7 +17,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-map-gl": "^7.0.18",
-    "react-scripts": "5.0.1",
+    "react-scripts": "^5.0.1",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
@@ -49,5 +49,5 @@
     "postcss": "^8.4.14",
     "tailwindcss": "^3.1.7"
   },
-  "proxy": "http://localhost:3001/api"
+  "proxy": "http://localhost:3001"
 }

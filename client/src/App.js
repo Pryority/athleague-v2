@@ -1,6 +1,9 @@
 // import OnboardCarousel from './components/Onboarding/OnboardCarousel';
 // import CourseNav from './CourseNav/CourseNav';
-import MainMap from './components/Map/MainMap';
+import CourseMap from './components/Maps/CourseMap';
+
+// import CreateMap from "./components/Maps/CourseMap";
+
 
 function App() {
   return (
@@ -8,7 +11,8 @@ function App() {
       <div className='flex flex-col w-full h-screen bg-blue-400 justify-between items-between'>
         {/* <CourseNav /> */}
         {/* <OnboardCarousel /> */}
-        <MainMap />
+        <CourseMap />
+        {/* <CreateMap /> */}
       </div>
     </div>
   );

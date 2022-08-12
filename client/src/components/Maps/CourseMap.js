@@ -29,8 +29,16 @@ export default function CreateMap() {
     const [courses, setCourses] = useState([]);
     const [currentCourseId, setCurrentCourseId] = useState(null);
 
-    const handleMarkerClick = (id) => {
+    const centerMap = (lat, long) => {
+
+    }
+
+    const handleMarkerClick = (id, lat, long) => {
         setCurrentCourseId(id);
+        setViewState({
+            latitude: lat,
+            longitude: long
+        })
         console.log(`Current Course ID: ${currentCourseId}`)
     }
 
@@ -70,7 +78,7 @@ export default function CreateMap() {
                             scale={2}
                         >
                             <div className='h-10 w-10 rounded-full bg-gradient-to-br from-lime-500/80 hover:from-lime-500/70 hover:to-green-500/70 to-green-500/80 border-2 border-lime-200/80 hover:border-lime-200/70'
-                                onClick={() => handleMarkerClick(marker._id)}
+                                onClick={() => handleMarkerClick(marker._id, marker.lat, marker.long)}
                             />
                         </Marker>
 

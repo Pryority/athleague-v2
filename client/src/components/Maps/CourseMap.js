@@ -1,6 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import Map, { Source, Layer, Marker, Popup } from 'react-map-gl';
 import BookmarkIcon from '@mui/icons-material/Bookmark';
+import FilterAltIcon from '@mui/icons-material/FilterAlt';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import AutorenewIcon from '@mui/icons-material/Autorenew';
+import 'react-dropdown/style.css';
+
 // import { Button } from '@mui/material';
 import axios from 'axios';
 const TOKEN = process.env.REACT_APP_MAPBOX;
@@ -127,12 +132,74 @@ export default function CreateMap() {
 
             <div className='flex w-full mx-8 justify-center items-start absolute top-12 z-50'>
                 <div className='flex w-full justify-center items-start absolute'>
-                    <div className='flex w-1/5'>
+
+                    {/* PROFILE ICON */}
+                    {/* <div className='flex w-1/5'>
                         <div className='h-10 w-10 bg-red-500 rounded-full border shadow' />
+                    </div> */}
+                    <div className='flex flex-col space-y-2 w-3/5 items-center bg-slate-200 p-3 rounded-xl border-2 border-slate-800/30 shadow'>
+                        <div className='flex w-full items-center space-x-4'>
+                            <div className='flex space-x-1 h-full p-2 items-center rounded-lg bg-sky-100 border-2 border-slate-400'>
+                                <FilterAltIcon fontSize='small' />
+                                <p className='font-medium text-md text-slate-700'>Filter</p>
+                                <KeyboardArrowDownIcon fontSize='small' />
+                            </div>
+                            <input placeholder='Search by location' className='flex w-full z-50 rounded-lg p-2 border-2 border-slate-400' />
+                            <div className='flex w-full justify-end'>
+                                <AutorenewIcon fontSize='small' />
+                            </div>
+                        </div>
+                        <div className='flex w-full items-center space-x-2'>
+                            <div className='flex w-full flex-col'>
+                                <p className='text-slate-700 font-medium'>Distance</p>
+                                <div className='flex border border-slate-400 rounded-lg'>
+                                    <input placeholder='Min' className='flex w-full p-1 px-2 rounded-l-lg' />
+                                    <div className='border' />
+                                    <input placeholder='Max' className='flex w-full p-1 px-2 rounded-r-lg' />
+                                </div>
+                            </div>
+                            <div className='flex w-full flex-col'>
+                                <p className='text-slate-700 font-medium'>Completions</p>
+                                <div className='flex border border-slate-400 rounded-lg'>
+                                    <input placeholder='Min' className='flex w-full p-1 px-2 rounded-l-lg' />
+                                    <div className='border' />
+                                    <input placeholder='Max' className='flex w-full p-1 px-2 rounded-r-lg' />
+                                </div>
+                            </div>
+                        </div>
+                        <div className='flex w-full items-center space-x-2'>
+                            <div className='flex w-full flex-col'>
+                                <p className='text-slate-700 font-medium'>Type</p>
+                                <div className='flex border border-slate-400 rounded-lg'>
+                                    <select name='type' className='flex w-full p-1 px-2 rounded-lg' />
+                                </div>
+                            </div>
+                            <div className='flex w-full flex-col'>
+                                <p className='text-slate-700 font-medium'>Completions</p>
+                                <div className='flex border border-slate-400 rounded-lg'>
+                                    <input placeholder='Min' className='flex w-full p-1 px-2 rounded-l-lg' />
+                                    <div className='border' />
+                                    <input placeholder='Max' className='flex w-full p-1 px-2 rounded-r-lg' />
+                                </div>
+                            </div>
+                        </div>
+                        {/* SPACER */}
+                        {/* <div className='flex w-1 /5'>
+                                    <div className='h-12 w-12 bg-clear rounded-full' />
+                                </div> */}
                     </div>
-                    <div className='flex flex-col w-3/5 items-center space-y-2'>
-                        <input placeholder='Search by location' className='flex w-full z-50 rounded-lg p-2 border shadow' />
-                        <div className='flex w-full justify-center space-x-4'>
+                </div>
+            </div>
+            {/* {courseMarkers} */}
+            {/* <Source id="my-data" type="geojson" data={geojson}>
+                <Layer {...layerStyle} />
+            </Source> */}
+        </Map >
+    )
+}
+
+
+{/* <div className='flex w-full justify-center space-x-4'>
                             <div className='bg-sky-100 px-4 rounded-full border-2 border-slate-400 shadow-sm'>
                                 Adventure
                             </div>
@@ -145,17 +212,4 @@ export default function CreateMap() {
                             <div className='bg-sky-100 px-4 rounded-full border-2 border-slate-400 shadow-sm'>
                                 Objective
                             </div>
-                        </div>
-                    </div>
-                    <div className='flex w-1/5'>
-                        <div className='h-12 w-12 bg-clear rounded-full' />
-                    </div>
-                </div>
-            </div>
-            {/* {courseMarkers} */}
-            {/* <Source id="my-data" type="geojson" data={geojson}>
-                <Layer {...layerStyle} />
-            </Source> */}
-        </Map >
-    )
-}
+                        </div> */}

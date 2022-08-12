@@ -29,10 +29,6 @@ export default function CreateMap() {
     const [courses, setCourses] = useState([]);
     const [currentCourseId, setCurrentCourseId] = useState(null);
 
-    const centerMap = (lat, long) => {
-
-    }
-
     const handleMarkerClick = (id, lat, long) => {
         setCurrentCourseId(id);
         setViewState({
@@ -67,7 +63,6 @@ export default function CreateMap() {
 
             {courses.map((marker, index, key) => {
                 return (
-
                     <>
                         <Marker
                             key={index}
@@ -89,6 +84,7 @@ export default function CreateMap() {
                                 anchor="left"
                                 closeButton={true}
                                 closeOnClick={false}
+                                onClose={() => setCurrentCourseId(null)}
                             >
                                 <div className='w-full'>
                                     <img src='https://www.seguin.ca/en/explore-play/resources/Pictures/11140305_bn_seguin-interiors_0052_bike-on-trail.jpg' alt='trail-demo' className='rounded-md mb-2' />
@@ -96,7 +92,7 @@ export default function CreateMap() {
                                     <div className='border-b mb-2' />
                                     <div className='flex space-x-2 items-center text-md space-between justify-between'>
                                         <p className='text-md'>Type:</p>
-                                        <p className='font-medium text-slate-900 capitalize text-sm'>Adventure</p>
+                                        <p className='font-medium text-slate-900 capitalize text-sm'>{marker.type}</p>
                                     </div>
                                     <div className='flex space-x-2 items-center text-md space-between justify-between'>
                                         <p className='text-md'>Completions:</p>
@@ -129,8 +125,7 @@ export default function CreateMap() {
                 )
             })}
 
-
-            <div className='flex w-full mx-8 justify-center items-start absolute top-12'>
+            <div className='flex w-full mx-8 justify-center items-start absolute top-12 z-50'>
                 <div className='flex w-full justify-center items-start absolute'>
                     <div className='flex w-1/5'>
                         <div className='h-10 w-10 bg-red-500 rounded-full border shadow' />

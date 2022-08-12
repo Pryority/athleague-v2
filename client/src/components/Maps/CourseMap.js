@@ -4,7 +4,6 @@ import BookmarkIcon from '@mui/icons-material/Bookmark';
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import AutorenewIcon from '@mui/icons-material/Autorenew';
-import 'react-dropdown/style.css';
 
 // import { Button } from '@mui/material';
 import axios from 'axios';

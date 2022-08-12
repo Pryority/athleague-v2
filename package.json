@@ -4,7 +4,7 @@
   "description": "This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).",
   "main": "index.js",
   "scripts": {
-    "dev": "concurrently \"cd server && npm run watch\" \"cd client && npm start\""
+    "dev": "concurrently \"cd backend && npm run watch\" \"cd client && npm start\""
   },
   "repository": {
     "type": "git",

@@ -12,11 +12,11 @@ const courseSchema = new Schema({
         min: 3,
         max: 20,
     },
-    // tags: {
-    //     type: [String],
-    //     require: true,
-    //     enum: ['sports', 'racing', 'action', 'rpg']
-    // },
+    type: {
+        type: [String],
+        require: true,
+        enum: ['adventure', 'tactical', 'sprint', 'objective']
+    },
     desc: {
         type: String,
         require: true,
@@ -33,6 +33,10 @@ const courseSchema = new Schema({
         require: true
     },
     long: {
+        type: Number,
+        require: true
+    },
+    completions: {
         type: Number,
         require: true
     }

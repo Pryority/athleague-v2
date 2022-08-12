@@ -22,15 +22,17 @@ const TOKEN = process.env.REACT_APP_MAPBOX;
 
 export default function CreateMap() {
     const [viewState, setViewState] = useState({
-        latitude: 40,
+        latitude: 20,
         longitude: -81,
         zoom: 5
     });
     const [courses, setCourses] = useState([]);
-    const [showPopup, setShowPopup] = useState(true);
-    // const handleMarkerClick = () => {
-    //     setShowPopup(!showPopup)
-    // }
+    const [currentCourseId, setCurrentCourseId] = useState(null);
+
+    const handleMarkerClick = (id) => {
+        setCurrentCourseId(id);
+        console.log(`Current Course ID: ${currentCourseId}`)
+    }
 
     useEffect(() => {
         const getCourses = async () => {
@@ -54,51 +56,11 @@ export default function CreateMap() {
             mapStyle="mapbox://styles/mapbox/streets-v9"
             className='relative'
         >
+
             {courses.map((marker, index, key) => {
                 return (
-                    <>
-                        <Popup
-                            latitude={marker.lat}
-                            longitude={marker.long}
-                            anchor="left"
-                            onClose={() => setShowPopup(false)}
-                        // focusAfterOpen={true}
-                        >
-                            <div className='w-full'>
-                                <img src='https://www.seguin.ca/en/explore-play/resources/Pictures/11140305_bn_seguin-interiors_0052_bike-on-trail.jpg' alt='trail-demo' className='rounded-md mb-2' />
-                                <h4 className='text-xl font-bold'>{marker.title}</h4>
-                                <div className='border-b mb-2' />
-                                <div className='flex space-x-2 items-center text-md space-between justify-between'>
-                                    <p className='text-md'>Type:</p>
-                                    <p className='font-medium text-slate-900 capitalize text-sm'>Adventure</p>
-                                </div>
-                                <div className='flex space-x-2 items-center text-md space-between justify-between'>
-                                    <p className='text-md'>Completions:</p>
-                                    <p className='font-medium text-slate-900 capitalize text-sm'>513</p>
-                                </div>
-                                <div className='flex space-x-2 items-center text-md space-between justify-between'>
-                                    <p className='text-md'>Distance:</p>
-                                    <p className='font-medium text-slate-900 capitalize text-sm'>8 km</p>
-                                </div>
-                                <div className='flex space-x-2 items-center text-md space-between justify-between'>
-                                    <p className='text-md'>Creator:</p>
-                                    <p className='font-medium text-slate-900 capitalize text-sm'>{marker.username}</p>
-                                </div>
-                                <div className='flex w-full justify-center mt-4'>
-                                    <button className='flex w-full items-center justify-center bg-blue-500 border hover:border-slate-300 text-white p-1 px-2 rounded-md'
-                                        onClick={() => console.log(`Viewing ${marker.title}`)}
-                                    >
-                                        View Course
-                                    </button>
-                                    <div className='flex items-center px-2'>
-                                        <BookmarkIcon color="primary"
-                                            onClick={() => console.log(`Saving ${marker.title} to Favorites!`)}
-                                        />
-                                    </div>
-                                </div>
-                            </div>
-                        </Popup>
 
+                    <>
                         <Marker
                             key={index}
                             latitude={marker.lat}
@@ -106,7 +68,55 @@ export default function CreateMap() {
                             anchor="right"
                             offset={0}
                             scale={2}
-                        />
+                        >
+                            <div className='h-10 w-10 rounded-full bg-gradient-to-br from-lime-500/80 hover:from-lime-500/70 hover:to-green-500/70 to-green-500/80 border-2 border-lime-200/80 hover:border-lime-200/70'
+                                onClick={() => handleMarkerClick(marker._id)}
+                            />
+                        </Marker>
+
+                        {currentCourseId === marker._id && (
+                            < Popup
+                                latitude={marker.lat}
+                                longitude={marker.long}
+                                anchor="left"
+                                closeButton={true}
+                                closeOnClick={false}
+                            >
+                                <div className='w-full'>
+                                    <img src='https://www.seguin.ca/en/explore-play/resources/Pictures/11140305_bn_seguin-interiors_0052_bike-on-trail.jpg' alt='trail-demo' className='rounded-md mb-2' />
+                                    <h4 className='text-xl font-bold'>{marker.title}</h4>
+                                    <div className='border-b mb-2' />
+                                    <div className='flex space-x-2 items-center text-md space-between justify-between'>
+                                        <p className='text-md'>Type:</p>
+                                        <p className='font-medium text-slate-900 capitalize text-sm'>Adventure</p>
+                                    </div>
+                                    <div className='flex space-x-2 items-center text-md space-between justify-between'>
+                                        <p className='text-md'>Completions:</p>
+                                        <p className='font-medium text-slate-900 capitalize text-sm'>513</p>
+                                    </div>
+                                    <div className='flex space-x-2 items-center text-md space-between justify-between'>
+                                        <p className='text-md'>Distance:</p>
+                                        <p className='font-medium text-slate-900 capitalize text-sm'>8 km</p>
+                                    </div>
+                                    <div className='flex space-x-2 items-center text-md space-between justify-between'>
+                                        <p className='text-md'>Creator:</p>
+                                        <p className='font-medium text-slate-900 capitalize text-sm'>{marker.username}</p>
+                                    </div>
+                                    <div className='flex w-full justify-center mt-4'>
+                                        <button className='flex w-full items-center justify-center bg-blue-500 border hover:border-slate-300 text-white p-1 px-2 rounded-md'
+                                            onClick={() => console.log(`Viewing ${marker.title}`)}
+                                        >
+                                            View Course
+                                        </button>
+                                        <div className='flex items-center px-2'>
+                                            <BookmarkIcon color="primary"
+                                                onClick={() => console.log(`Saving ${marker.title} to Favorites!`)}
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                            </Popup>)
+                        }
                     </>
                 )
             })}

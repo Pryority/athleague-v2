@@ -1,28 +1,16 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useCallback, useContext, useEffect, useRef, useState } from 'react'
 import Map, { Source, Layer, Marker, Popup } from 'react-map-gl';
 import BookmarkIcon from '@mui/icons-material/Bookmark';
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
+import UndoIcon from '@mui/icons-material/Undo';
+import RedoIcon from '@mui/icons-material/Redo';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import ControlPointIcon from '@mui/icons-material/ControlPoint';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import AutorenewIcon from '@mui/icons-material/Autorenew';
 
-// import { Button } from '@mui/material';
 import axios from 'axios';
 const TOKEN = process.env.REACT_APP_MAPBOX;
-// const geojson = {
-//     type: 'FeatureCollection',
-//     features: [
-//         { type: 'Feature', geometry: { type: 'Point', coordinates: [-81, 40] } }
-//     ]
-// };
-
-// const layerStyle = {
-//     id: 'point',
-//     type: 'circle',
-//     paint: {
-//         'circle-radius': 10,
-//         'circle-color': '#007cbf'
-//     }
-// };
 
 export default function CreateMap() {
     const [viewState, setViewState] = useState({
@@ -34,7 +22,7 @@ export default function CreateMap() {
     const [toggle, setToggle] = useState(true);
     const [newCourse, setNewCourse] = useState(null)
     const [currentCourseId, setCurrentCourseId] = useState(null);
-
+    const mapRef = useRef();
     const handleMarkerClick = (id, lat, long) => {
         setCurrentCourseId(id);
         setViewState({
@@ -45,12 +33,44 @@ export default function CreateMap() {
         console.log(`Course Coordinates: Lat-${lat} Long-${long}`)
     }
 
-    const handleAddMarker = (lat, lng) => {
-        console.log('test', lat)
-        setNewCourse({
-            lat,
-            lng
-        })
+    const pushMarker = async (lat, lng) => {
+        try {
+            const res = await axios.post('/api/courses', {
+                "username": "<USERNAME>",
+                "title": "<TITLE>",
+                "type": "<TYPE>",
+                "desc": "<DESCRIPTION>",
+                "rating": 5,
+                "lat": lat,
+                "long": lng
+            })
+            console.log('🟢 COURSES:', res.data)
+            // setCourses(res.data)
+        } catch (err) {
+            console.log('<><><><><><><>', err, '<><><><><><><>')
+        }
+    }
+
+    const handleAddMarker = async (loc) => {
+        console.log('Location:', loc)
+        const course = {
+            "username": "<asdf>",
+            "title": "<asdf>",
+            "type": "<asdf>",
+            "desc": "<asdf>",
+            "rating": 5,
+            "lat": loc.lat,
+            "long": loc.long
+        }
+        courses.push(course)
+        console.log('🟢 COURSES:', courses)
+        // await axios.post('http://localhost:3000/api/courses', { data: { ...courses } }, {
+        //     headers: {
+        //         'Content-Type': 'application/json',
+        //     },
+        //     method: 'POST',
+        // }).then(data => console.log(data))
+        console.log('🟢 COURSES:', courses)
     };
 
     useEffect(() => {
@@ -69,6 +89,7 @@ export default function CreateMap() {
     return (
         <Map
             {...viewState}
+            ref={mapRef}
             onMove={evt => setViewState(evt.viewState)}
             mapboxAccessToken={TOKEN}
             // mapStyle="mapbox://styles/matthewpryor/ckzepsxne002b14ov4oo7gb8r"
@@ -144,7 +165,7 @@ export default function CreateMap() {
                 })
             }
 
-            < div className='flex w-full justify-center items-center absolute top-4 z-50' >
+            <div id='filter-menu' className='flex w-full justify-center items-center absolute top-4 z-50' >
                 <div className='flex w-5/6 justify-center items-start h-full absolute'>
                     <div className='flex flex-col space-y-2 w-full items-center bg-slate-200 p-3 rounded-xl border-2 border-slate-800/30 shadow'>
                         <div
@@ -162,7 +183,9 @@ export default function CreateMap() {
                                     <p className='font-medium text-md text-slate-700'>Filter</p>
                                     <KeyboardArrowDownIcon fontSize='small' />
                                 </div>
-                                <input placeholder='Search by location' className='flex  flex-col w-full z-50 rounded-lg p-2 border-2 border-slate-400' />
+                                {/* GEOCODER */}
+
+                                <input id='geocode-search' placeholder='Search by location' className='flex  flex-col w-full z-50 rounded-lg p-2 border-2 border-slate-400' />
                                 <div className='flex p-2 justify-end'>
                                     <AutorenewIcon fontSize='small' />
                                 </div>
@@ -189,7 +212,6 @@ export default function CreateMap() {
                                     </div>
 
 
-
                                     <div className='flex w-full flex-col'>
                                         <p className='text-slate-700 font-medium'>Type</p>
                                         <div className='flex border border-slate-400 rounded-lg'>
@@ -207,22 +229,34 @@ export default function CreateMap() {
                                     </div>
                                 </div>
                             </div>)}
-
                         </div>
-
-
-                        {/* SPACER */}
-                        {/* <div className='flex w-1 /5'>
-                                    <div className='h-12 w-12 bg-clear rounded-full' />
-                                </div> */}
                     </div>
                 </div>
             </div >
-            {/* {courseMarkers} */}
-            {/* <Source id="my-data" type="geojson" data={geojson}>
-                <Layer {...layerStyle} />
-            </Source> */}
+            <div id='HUD' className='flex w-full justify-center items-center absolute bottom-12 z-50' >
+                <div className='flex w-full absolute justify-center space-x-2 items-center'>
+                    <div className='flex space-x-1'>
+                        <div className='flex flex-col w-12 h-12 space-y-2 justify-center items-center bg-slate-200 p-3 rounded-xl border-2 border-slate-300 shadow text-2xl font-black'>
+                            <UndoIcon />
+                        </div>
+                        <div className='flex flex-col w-12 h-12 space-y-2 justify-center items-center bg-slate-200 p-3 rounded-xl border-2 border-slate-300 shadow text-2xl font-black opacity-50'>
+                            <RedoIcon />
+                        </div>
+                    </div>
+                    <div className='flex flex-col w-16 h-16 space-y-2 justify-center items-center bg-gradient-to-r from-lime-500 to-yellow-500 p-3 rounded-full border-2 border-stone-200 shadow text-4xl font-black'>
+                        <ControlPointIcon className='scale-150' />
+                    </div>
+                    <div className='flex space-x-1'>
 
+                        <div className='flex flex-col w-24 h-12 space-y-2 justify-center items-center bg-red-200 p-3 rounded-xl border-2 border-red-300 shadow text-2xl font-black'>
+                            <DeleteForeverIcon />
+                        </div>
+                        {/* <div className='flex flex-col w-12 h-12 space-y-2 justify-center items-center bg-slate-200 p-3 rounded-xl border-2 border-slate-800/30 shadow text-2xl font-black opacity-0'>
+                            ↪️
+                        </div> */}
+                    </div>
+                </div>
+            </div>
         </Map >
     )
 }

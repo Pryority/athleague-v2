@@ -8,6 +8,29 @@ const isProduction = process.env.NODE_ENV == "production";
 
 const stylesHandler = "style-loader";
 
+const htmlPlugin = new HtmlWebpackPlugin({
+  template: "./src/index.html",
+  filename: "./index.html"
+});
+
+module.exports = {
+  mode: "development",
+  module: {
+    rules: [{
+      test: /\.js$/,
+      exclude: /node_modules/,
+      use: {
+        loader: "babel-loader"
+      }
+    },
+    {
+      test: /\.css$/,
+      use: ["style-loader", "css-loader"]
+    }
+    ]
+  },
+  plugins: [htmlPlugin]
+};
 const config = {
   entry: "./src/index.js",
   output: {

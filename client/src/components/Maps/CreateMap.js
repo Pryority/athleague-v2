@@ -88,6 +88,7 @@ export default function CreateMap() {
             // mapStyle="mapbox://styles/matthewpryor/ckzepsxne002b14ov4oo7gb8r"
             mapStyle="mapbox://styles/mapbox/streets-v9"
             className='relative'
+            minZoom={2}
             onClick={(e) => {
                 handleAddMarker({ lat: e.lngLat.lat, long: e.lngLat.lng })
 
@@ -237,14 +238,29 @@ export default function CreateMap() {
             <div id='HUD' className='flex w-full justify-center items-center absolute bottom-12 z-50' >
                 <div className='flex w-full absolute justify-center space-x-2 items-center'>
                     <div className='flex space-x-1'>
-                        <div className='flex flex-col w-12 h-12 space-y-2 justify-center items-center bg-slate-200 p-3 rounded-xl border-2 border-slate-300 shadow text-2xl font-black'
-                            onClick={() => {
-                                console.log('Deleting previous')
-                                checkpoints.pop();
-                            }}
-                        >
-                            <UndoIcon />
-                        </div>
+                        {
+                            (checkpoints.length === 0) ? (
+                                <div className='flex flex-col w-12 h-12 space-y-2 justify-center items-center bg-slate-200 p-3 rounded-xl border-2 border-slate-300 shadow text-2xl font-black
+                                opacity-50'
+                                    onClick={() => {
+                                        console.log('Deleting previous')
+                                        checkpoints.pop();
+                                    }}
+                                >
+                                    <UndoIcon />
+                                </div>
+                            )
+                                :
+                                <div className='flex flex-col w-12 h-12 space-y-2 justify-center items-center bg-slate-200 p-3 rounded-xl border-2 border-slate-300 shadow text-2xl font-black'
+                                    onClick={() => {
+                                        console.log('Deleting previous')
+                                        checkpoints.pop();
+                                    }}
+                                >
+                                    <UndoIcon />
+                                </div>
+                        }
+
                         <div className='flex flex-col w-12 h-12 space-y-2 justify-center items-center bg-slate-200 p-3 rounded-xl border-2 border-slate-300 shadow text-2xl font-black opacity-50'>
                             <RedoIcon />
                         </div>

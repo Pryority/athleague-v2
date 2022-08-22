@@ -105,22 +105,34 @@ export default function CreateMap() {
                                 offset={[-5, -20]}
                                 scale={2}
                             >
-                                {(index === 0) ?
-                                    <div className='h-10 w-10 rounded-full bg-gradient-to-br from-yellow-500/80 hover:from-yellow-500/70 hover:to-yellow-500/70 to-yellow-500/80 border-2 border-yellow-200/80 hover:border-yellow-200/70 justify-center items-center animate-pulse'
-                                        onClick={() => handleMarkerClick(marker, marker.lat, marker.long)}
-                                    >
-                                        <div className='flex w-full justify-center h-full items-center text-md font-bold'>
-                                            {index + 1}
+                                {
+                                    (index === 0) ?
+                                        // START
+                                        <div className='h-10 w-10 rounded-full bg-gradient-to-br from-lime-500/80 hover:from-lime-500/70 hover:to-lime-500/70 to-lime-500/80 border-2 border-lime-200/80 hover:border-lime-200/70 justify-center items-center animate-pulse'
+                                            onClick={() => handleMarkerClick(marker, marker.lat, marker.long)}
+                                        >
+                                            <div className='flex w-full justify-center h-full items-center text-md font-bold'>
+                                                {index + 1}
+                                            </div>
                                         </div>
-                                    </div>
-                                    :
-                                    <div className='h-10 w-10 rounded-full bg-gradient-to-br from-sky-500/80 hover:from-blue-500/70 hover:to-sky-500/70 to-blue-500/80 border-2 border-sky-200/80 hover:border-sky-200/70 justify-center items-center animate-pulse'
-                                        onClick={() => handleMarkerClick(marker, marker.lat, marker.long)}
-                                    >
-                                        <div className='flex w-full justify-center h-full items-center text-md font-bold'>
-                                            {index + 1}
-                                        </div>
-                                    </div>
+                                        :
+                                        (index === checkpoints.length - 1) ?
+                                            // FINISH
+                                            <div className='h-10 w-10 rounded-full bg-gradient-to-br from-yellow-500/80 hover:from-yellow-500/70 hover:to-yellow-500/70 to-yellow-500/80 border-2 border-yellow-200/80 hover:border-yellow-200/70 justify-center items-center animate-pulse'
+                                                onClick={() => handleMarkerClick(marker, marker.lat, marker.long)}
+                                            >
+                                                <div className='flex w-full justify-center h-full items-center text-md font-bold'>
+                                                    {index + 1}
+                                                </div>
+                                            </div>
+                                            :
+                                            <div className='h-10 w-10 rounded-full bg-gradient-to-br from-sky-500/80 hover:from-blue-500/70 hover:to-sky-500/70 to-blue-500/80 border-2 border-blue-200/80 hover:border-sky-200/70 justify-center items-center animate-pulse'
+                                                onClick={() => handleMarkerClick(marker, marker.lat, marker.long)}
+                                            >
+                                                <div className='flex w-full justify-center h-full items-center text-md font-bold'>
+                                                    {index + 1}
+                                                </div>
+                                            </div>
                                 }
                             </Marker>
 
@@ -241,7 +253,6 @@ export default function CreateMap() {
                         <ControlPointIcon className='scale-150' />
                     </div>
                     <div className='flex space-x-1'>
-
                         <div className='flex flex-col w-24 h-12 space-y-2 justify-center items-center bg-red-200 p-3 rounded-xl border-2 border-red-300 shadow text-2xl font-black'
                         >
                             <DeleteForeverIcon />

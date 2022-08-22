@@ -7,8 +7,8 @@ import CourseMap from './components/Maps/CourseMap';
 
 function App() {
   return (
-    <div id='map' className="flex bg-blue-400">
-      <div className='flex flex-col w-full h-screen bg-blue-400 justify-between items-between'>
+    <div id='map' className="flex">
+      <div className='flex flex-col w-full h-screen justify-between items-between'>
         {/* <CourseNav /> */}
         {/* <OnboardCarousel /> */}
         <CourseMap />

@@ -31,6 +31,7 @@ export default function CreateMap() {
         zoom: 5
     });
     const [courses, setCourses] = useState([]);
+    const [toggle, setToggle] = useState(true);
     const [currentCourseId, setCurrentCourseId] = useState(null);
 
     const handleMarkerClick = (id, lat, long) => {
@@ -129,59 +130,79 @@ export default function CreateMap() {
                 )
             })}
 
-            <div className='flex w-full mx-8 justify-center items-start absolute top-12 z-50'>
-                <div className='flex w-full justify-center items-start absolute'>
+            <div className='flex w-full justify-center items-center absolute top-4 z-50'>
+                <div className='flex w-5/6 justify-center items-start h-full absolute'>
 
                     {/* PROFILE ICON */}
                     {/* <div className='flex w-1/5'>
                         <div className='h-10 w-10 bg-red-500 rounded-full border shadow' />
                     </div> */}
-                    <div className='flex flex-col space-y-2 w-3/5 items-center bg-slate-200 p-3 rounded-xl border-2 border-slate-800/30 shadow'>
-                        <div className='flex w-full items-center space-x-4'>
-                            <div className='flex space-x-1 h-full p-2 items-center rounded-lg bg-sky-100 border-2 border-slate-400'>
-                                <FilterAltIcon fontSize='small' />
-                                <p className='font-medium text-md text-slate-700'>Filter</p>
-                                <KeyboardArrowDownIcon fontSize='small' />
+                    <div className='flex flex-col space-y-2 w-full items-center bg-slate-200 p-3 rounded-xl border-2 border-slate-800/30 shadow'>
+                        <div
+                            className='flex flex-col w-full items-center'
+                        >
+                            <div className='flex w-full space-x-2'>
+                                <div id='filter'
+                                    onClick={() => {
+                                        console.log('clicked')
+                                        setToggle(!toggle)
+                                        console.log(toggle)
+                                    }}
+                                    className='flex space-x-1 h-full p-2 items-center rounded-lg bg-sky-100 border-2 border-slate-400'>
+                                    <FilterAltIcon fontSize='small' />
+                                    <p className='font-medium text-md text-slate-700'>Filter</p>
+                                    <KeyboardArrowDownIcon fontSize='small' />
+                                </div>
+                                <input placeholder='Search by location' className='flex  flex-col w-full z-50 rounded-lg p-2 border-2 border-slate-400' />
+                                <div className='flex w-full justify-end'>
+                                    <AutorenewIcon fontSize='small' />
+
+                                </div>
                             </div>
-                            <input placeholder='Search by location' className='flex w-full z-50 rounded-lg p-2 border-2 border-slate-400' />
-                            <div className='flex w-full justify-end'>
-                                <AutorenewIcon fontSize='small' />
-                            </div>
+
+                            {toggle && (<div className='flex flex-col w-full justify-around items-around'>
+                                <div className='grid grid-cols-2 mt-4 items-center gap-2 w-full'>
+                                    <div className='flex w-full flex-col'>
+                                        <p className='text-slate-700 font-medium'>Distance</p>
+                                        <div className='flex border border-slate-400 rounded-lg'>
+                                            <input placeholder='Min' className='flex w-full p-1 px-2 rounded-l-lg' />
+                                            <div className='border' />
+                                            <input placeholder='Max' className='flex w-full p-1 px-2 rounded-r-lg' />
+                                        </div>
+                                    </div>
+
+                                    <div className='flex w-full flex-col'>
+                                        <p className='text-slate-700 font-medium'>Completions</p>
+                                        <div className='flex border border-slate-400 rounded-lg'>
+                                            <input placeholder='Min' className='flex w-full p-1 px-2 rounded-l-lg' />
+                                            <div className='border' />
+                                            <input placeholder='Max' className='flex w-full p-1 px-2 rounded-r-lg' />
+                                        </div>
+                                    </div>
+
+
+
+                                    <div className='flex w-full flex-col'>
+                                        <p className='text-slate-700 font-medium'>Type</p>
+                                        <div className='flex border border-slate-400 rounded-lg'>
+                                            <select name='type' className='flex w-full p-1 px-2 rounded-lg' />
+                                        </div>
+                                    </div>
+
+                                    <div className='flex w-full flex-col'>
+                                        <p className='text-slate-700 font-medium'>Completions</p>
+                                        <div className='flex border border-slate-400 rounded-lg'>
+                                            <input placeholder='Min' className='flex w-full p-1 px-2 rounded-l-lg' />
+                                            <div className='border' />
+                                            <input placeholder='Max' className='flex w-full p-1 px-2 rounded-r-lg' />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>)}
+
                         </div>
-                        <div className='flex w-full items-center space-x-2'>
-                            <div className='flex w-full flex-col'>
-                                <p className='text-slate-700 font-medium'>Distance</p>
-                                <div className='flex border border-slate-400 rounded-lg'>
-                                    <input placeholder='Min' className='flex w-full p-1 px-2 rounded-l-lg' />
-                                    <div className='border' />
-                                    <input placeholder='Max' className='flex w-full p-1 px-2 rounded-r-lg' />
-                                </div>
-                            </div>
-                            <div className='flex w-full flex-col'>
-                                <p className='text-slate-700 font-medium'>Completions</p>
-                                <div className='flex border border-slate-400 rounded-lg'>
-                                    <input placeholder='Min' className='flex w-full p-1 px-2 rounded-l-lg' />
-                                    <div className='border' />
-                                    <input placeholder='Max' className='flex w-full p-1 px-2 rounded-r-lg' />
-                                </div>
-                            </div>
-                        </div>
-                        <div className='flex w-full items-center space-x-2'>
-                            <div className='flex w-full flex-col'>
-                                <p className='text-slate-700 font-medium'>Type</p>
-                                <div className='flex border border-slate-400 rounded-lg'>
-                                    <select name='type' className='flex w-full p-1 px-2 rounded-lg' />
-                                </div>
-                            </div>
-                            <div className='flex w-full flex-col'>
-                                <p className='text-slate-700 font-medium'>Completions</p>
-                                <div className='flex border border-slate-400 rounded-lg'>
-                                    <input placeholder='Min' className='flex w-full p-1 px-2 rounded-l-lg' />
-                                    <div className='border' />
-                                    <input placeholder='Max' className='flex w-full p-1 px-2 rounded-r-lg' />
-                                </div>
-                            </div>
-                        </div>
+
+
                         {/* SPACER */}
                         {/* <div className='flex w-1 /5'>
                                     <div className='h-12 w-12 bg-clear rounded-full' />
@@ -196,19 +217,3 @@ export default function CreateMap() {
         </Map >
     )
 }
-
-
-{/* <div className='flex w-full justify-center space-x-4'>
-                            <div className='bg-sky-100 px-4 rounded-full border-2 border-slate-400 shadow-sm'>
-                                Adventure
-                            </div>
-                            <div className='bg-sky-100 px-4 rounded-full border-2 border-slate-400 shadow-sm'>
-                                Tactical
-                            </div>
-                            <div className='bg-sky-100 px-4 rounded-full border-2 border-slate-400 shadow-sm'>
-                                Sprint
-                            </div>
-                            <div className='bg-sky-100 px-4 rounded-full border-2 border-slate-400 shadow-sm'>
-                                Objective
-                            </div>
-                        </div> */}

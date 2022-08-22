@@ -8,6 +8,7 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import ControlPointIcon from '@mui/icons-material/ControlPoint';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import AutorenewIcon from '@mui/icons-material/Autorenew';
+import ClearIcon from '@mui/icons-material/Clear';
 
 import axios from 'axios';
 const TOKEN = process.env.REACT_APP_MAPBOX;
@@ -19,17 +20,17 @@ export default function CreateMap() {
         zoom: 5
     });
     const [checkpoints, setCheckpoints] = useState([]);
-    const [toggle, setToggle] = useState(true);
-    const [currentCourseId, setCurrentCourseId] = useState(null);
+    const [toggle, setToggle] = useState(false);
+    const [selectedCP, setSelectedCP] = useState({});
     const mapRef = useRef();
-    const handleMarkerClick = (id, lat, long) => {
-        setCurrentCourseId(id);
+    const handleMarkerClick = (cp, lat, long) => {
+        setSelectedCP(cp);
         setViewState({
             latitude: lat,
             longitude: long
         })
-        console.log(`Current Course ID: ${currentCourseId}`)
-        console.log(`Course Coordinates: Lat-${lat} Long-${long}`)
+        console.log(`Current Course ID: ${selectedCP}`)
+        console.log(`Course Coordinates: \n Lat-${lat} Long-${long}`)
     }
 
     const saveCourse = async (lat, lng) => {
@@ -87,7 +88,10 @@ export default function CreateMap() {
             // mapStyle="mapbox://styles/matthewpryor/ckzepsxne002b14ov4oo7gb8r"
             mapStyle="mapbox://styles/mapbox/streets-v9"
             className='relative'
-            onClick={(e) => handleAddMarker({ lat: e.lngLat.lat, long: e.lngLat.lng })}
+            onClick={(e) => {
+                handleAddMarker({ lat: e.lngLat.lat, long: e.lngLat.lng })
+
+            }}
         >
             {
                 checkpoints.map((marker, index, key) => {
@@ -98,29 +102,50 @@ export default function CreateMap() {
                                 latitude={marker.lat}
                                 longitude={marker.long}
                                 anchor="top"
-                                offset={0}
+                                offset={[-5, -20]}
                                 scale={2}
                             >
-                                <div className='h-10 w-10 rounded-full bg-gradient-to-br from-lime-500/80 hover:from-lime-500/70 hover:to-green-500/70 to-green-500/80 border-2 border-lime-200/80 hover:border-lime-200/70 justify-center items-center'
-                                    onClick={() => handleMarkerClick(marker._id, marker.lat, marker.long)}
-                                >
-                                    <div className='flex w-full justify-center h-full items-center text-md font-bold'>
-                                        {index + 1}
+                                {(index === 0) ?
+                                    <div className='h-10 w-10 rounded-full bg-gradient-to-br from-yellow-500/80 hover:from-yellow-500/70 hover:to-yellow-500/70 to-yellow-500/80 border-2 border-yellow-200/80 hover:border-yellow-200/70 justify-center items-center animate-pulse'
+                                        onClick={() => handleMarkerClick(marker, marker.lat, marker.long)}
+                                    >
+                                        <div className='flex w-full justify-center h-full items-center text-md font-bold'>
+                                            {index + 1}
+                                        </div>
                                     </div>
-                                </div>
+                                    :
+                                    <div className='h-10 w-10 rounded-full bg-gradient-to-br from-sky-500/80 hover:from-blue-500/70 hover:to-sky-500/70 to-blue-500/80 border-2 border-sky-200/80 hover:border-sky-200/70 justify-center items-center animate-pulse'
+                                        onClick={() => handleMarkerClick(marker, marker.lat, marker.long)}
+                                    >
+                                        <div className='flex w-full justify-center h-full items-center text-md font-bold'>
+                                            {index + 1}
+                                        </div>
+                                    </div>
+                                }
                             </Marker>
 
                             {
-                                currentCourseId === marker._id && (
+                                selectedCP.long === marker.long && (
                                     <Popup
                                         latitude={marker.lat}
                                         longitude={marker.long}
                                         anchor="bottom"
-                                        closeButton={true}
+                                        closeButton={false}
                                         closeOnClick={false}
-                                        onClose={() => setCurrentCourseId(null)}
+                                        offset={[-10, -40]}
                                     >
-                                        {`Checkpoint: ` + (index + 1)}
+                                        <div className='flex flex-col space-y-2 w-full items-center'>
+                                            <p className='flex w-full text-sm text-center'>{`Update Checkpoint: ${(index + 1)} to be`}</p>
+                                            <div className='flex justify-around w-full'>
+                                                <div className='bg-green-400 px-2 rounded-sm font-medium'>
+                                                    Start
+                                                </div>
+                                                <div className='bg-yellow-400 px-2 rounded-sm font-medium'>
+                                                    Finish
+                                                </div>
+                                            </div>
+                                        </div>
+
                                     </Popup>
                                 )
                             }

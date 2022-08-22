@@ -225,7 +225,12 @@ export default function CreateMap() {
             <div id='HUD' className='flex w-full justify-center items-center absolute bottom-12 z-50' >
                 <div className='flex w-full absolute justify-center space-x-2 items-center'>
                     <div className='flex space-x-1'>
-                        <div className='flex flex-col w-12 h-12 space-y-2 justify-center items-center bg-slate-200 p-3 rounded-xl border-2 border-slate-300 shadow text-2xl font-black'>
+                        <div className='flex flex-col w-12 h-12 space-y-2 justify-center items-center bg-slate-200 p-3 rounded-xl border-2 border-slate-300 shadow text-2xl font-black'
+                            onClick={() => {
+                                console.log('Deleting previous')
+                                checkpoints.pop();
+                            }}
+                        >
                             <UndoIcon />
                         </div>
                         <div className='flex flex-col w-12 h-12 space-y-2 justify-center items-center bg-slate-200 p-3 rounded-xl border-2 border-slate-300 shadow text-2xl font-black opacity-50'>
@@ -237,7 +242,8 @@ export default function CreateMap() {
                     </div>
                     <div className='flex space-x-1'>
 
-                        <div className='flex flex-col w-24 h-12 space-y-2 justify-center items-center bg-red-200 p-3 rounded-xl border-2 border-red-300 shadow text-2xl font-black'>
+                        <div className='flex flex-col w-24 h-12 space-y-2 justify-center items-center bg-red-200 p-3 rounded-xl border-2 border-red-300 shadow text-2xl font-black'
+                        >
                             <DeleteForeverIcon />
                         </div>
                         {/* <div className='flex flex-col w-12 h-12 space-y-2 justify-center items-center bg-slate-200 p-3 rounded-xl border-2 border-slate-800/30 shadow text-2xl font-black opacity-0'>

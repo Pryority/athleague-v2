@@ -29,6 +29,7 @@ export default function CreateMap() {
     const [showIntro, setShowIntro] = useState(true);
     const [showSave, setShowSave] = useState(false);
     const [showQuit, setShowQuit] = useState(false);
+    const [canAddCP, setCanAddCP] = useState(true);
 
     const mapRef = useRef();
     const handleMarkerClick = (cp, lat, long) => {
@@ -89,8 +90,11 @@ export default function CreateMap() {
             className='relative'
             minZoom={2}
             onClick={(e) => {
-                handleAddMarker({ lat: e.lngLat.lat, long: e.lngLat.lng })
-                setViewState({ ...viewState })
+                if (canAddCP) {
+                    handleAddMarker({ lat: e.lngLat.lat, long: e.lngLat.lng })
+                    setViewState({ ...viewState })
+                }
+                setCanAddCP(true)
             }}
         >
             {
@@ -104,12 +108,16 @@ export default function CreateMap() {
                                 anchor="top"
                                 offset={[-5, -20]}
                                 scale={2}
+                                onClick={() => setCanAddCP(false)}
                             >
                                 {
                                     (index === 0) ?
                                         // START
                                         <div className='h-10 w-10 rounded-full bg-gradient-to-br from-lime-500/80 hover:from-lime-500/70 hover:to-lime-500/70 to-lime-500/80 border-2 border-lime-200/80 hover:border-lime-200/70 justify-center items-center animate-pulse'
-                                            onClick={() => handleMarkerClick(marker, marker.lat, marker.long)}
+                                            onClick={() => {
+                                                handleMarkerClick(marker, marker.lat, marker.long)
+                                                setCanAddCP(!canAddCP)
+                                            }}
                                         >
                                             <div className='flex w-full justify-center h-full items-center text-md font-bold'>
                                                 {index + 1}

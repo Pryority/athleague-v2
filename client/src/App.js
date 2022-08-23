@@ -13,7 +13,9 @@ function App() {
         <CreateMap />
       </div>
     </div>
+
   );
+
 }
 
 export default App;

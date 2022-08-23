@@ -78,7 +78,7 @@ export default function CreateMap() {
             "long": loc.long
         }
         checkpoints.push(checkpoint)
-        console.log('Adding Marker -- UPDATED CHECKPOINTS ARRAY:', checkpoints)
+        // console.log('Adding Marker -- UPDATED CHECKPOINTS ARRAY:', checkpoints)
         setCourse(prev => ({ ...prev, checkpoints: checkpoints }));
     };
 
@@ -92,10 +92,10 @@ export default function CreateMap() {
     console.log(course)
     const numeral = require('numeral');
 
-    setInterval(() => {
-        const { rss, heapTotal } = process.memoryUsage();
-        console.log('rss', numeral(rss).format('0.0 ib'), 'heapTotal', numeral(heapTotal).format('0.0 ib'))
-    }, 5000)
+    // setInterval(() => {
+    //     const { rss, heapTotal } = process.memoryUsage();
+    //     console.log('rss', numeral(rss).format('0.0 ib'), 'heapTotal', numeral(heapTotal).format('0.0 ib'))
+    // }, 5000)
 
     useEffect(() => {
     }, [])
@@ -472,7 +472,7 @@ export default function CreateMap() {
                                             setShowClear(!showClear)
                                             setCheckpoints([])
                                         }}>
-                                        Quit
+                                        Clear
                                     </div>
                                 </div>
                             </form>

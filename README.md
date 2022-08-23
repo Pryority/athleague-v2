@@ -1,6 +1,8 @@
 # Athleague
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Create custom activity courses to establish easy goals for improving fitness.
+
+![A Demo of Athleague Course Creation](./client/src/assets/images/athleague-v2-demo.gif)
 
 ## Available Scripts
 

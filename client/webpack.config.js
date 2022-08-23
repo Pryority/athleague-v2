@@ -4,7 +4,7 @@ const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const WorkboxWebpackPlugin = require("workbox-webpack-plugin");
 
-const isProduction = process.env.NODE_ENV == "production";
+const isProduction = process.env.NODE_ENV === "production";
 
 const stylesHandler = "style-loader";
 
@@ -12,6 +12,10 @@ const htmlPlugin = new HtmlWebpackPlugin({
   template: "./src/index.html",
   filename: "./index.html"
 });
+
+const processPlugin = new HtmlWebpackPlugin({
+  'process.env.NODE_ENV': JSON.stringify('development')
+})
 
 module.exports = {
   mode: "development",
@@ -29,8 +33,9 @@ module.exports = {
     }
     ]
   },
-  plugins: [htmlPlugin]
+  plugins: [htmlPlugin, processPlugin]
 };
+
 const config = {
   entry: "./src/index.js",
   output: {
@@ -44,7 +49,7 @@ const config = {
     new HtmlWebpackPlugin({
       template: "index.html",
     }),
-
+    processPlugin
     // Add your plugins here
     // Learn more about plugins from https://webpack.js.org/configuration/plugins/
   ],

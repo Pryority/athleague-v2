@@ -10,6 +10,9 @@ module.exports = {
         new HtmlWebpackPlugin({
             template: "src/index.html", // to import index.html file inside index.js
         }),
+        new HtmlWebpackPlugin({
+            process: { env: {} }
+        })
     ],
     devServer: {
         port: 3001, // you can change the port

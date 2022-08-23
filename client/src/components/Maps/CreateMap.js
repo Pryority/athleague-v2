@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import Map, { Marker, Popup } from 'react-map-gl';
+import axios from 'axios';
 import UndoIcon from '@mui/icons-material/Undo';
 import RedoIcon from '@mui/icons-material/Redo';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
@@ -17,7 +18,6 @@ import {
     Link
 } from "react-router-dom";
 
-import axios from 'axios';
 const TOKEN = process.env.REACT_APP_MAPBOX;
 
 export default function CreateMap() {
@@ -90,13 +90,18 @@ export default function CreateMap() {
         console.log('Saved Course: ', course)
     }
     console.log(course)
+    const numeral = require('numeral');
+
+    setInterval(() => {
+        const { rss, heapTotal } = process.memoryUsage();
+        console.log('rss', numeral(rss).format('0.0 ib'), 'heapTotal', numeral(heapTotal).format('0.0 ib'))
+    }, 5000)
 
     useEffect(() => {
     }, [])
 
     return (
         <Router>
-
             <Map
                 {...viewState}
                 ref={mapRef}
@@ -201,6 +206,7 @@ export default function CreateMap() {
                 }
 
                 <div id='filter-menu' className='flex w-full px-2 space-x-2 justify-center items-center absolute  top-4 z-2' >
+
                     <div className='flex flex-col space-y-2 w-full md:w-2/3 lg:w-1/2 items-center bg-slate-200/90 p-3 rounded-xl border-2 border-slate-800/30 shadow'>
                         <div
                             className='flex flex-col w-full items-center'

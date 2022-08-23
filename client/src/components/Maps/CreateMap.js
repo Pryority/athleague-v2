@@ -92,10 +92,7 @@ export default function CreateMap() {
     console.log(course)
 
     useEffect(() => {
-        console.log(viewState)
-        // setCourse({ checkpoints: checkpoints })
-        console.log('Course: ', course)
-    }, [viewState, courseName, course])
+    }, [])
 
     return (
         <Router>

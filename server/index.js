@@ -20,4 +20,4 @@ mongoose
 app.use('/api/courses', courseRoute);
 app.use('/api/users', userRoute);
 
-app.listen(3001, () => console.log('Backend server is running! 🖥'))
+app.listen(3001, () => console.log('server server is running! 🖥'))

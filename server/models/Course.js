@@ -15,7 +15,7 @@ const courseSchema = new Schema({
     type: {
         type: [String],
         require: true,
-        enum: ['adventure', 'tactical', 'sprint', 'objective']
+        enum: ['adventure', 'objective', 'lookout', 'freestyle']
     },
     desc: {
         type: String,
@@ -37,6 +37,10 @@ const courseSchema = new Schema({
         require: true
     },
     completions: {
+        type: Number,
+        require: true
+    },
+    checkpoints: {
         type: Number,
         require: true
     }

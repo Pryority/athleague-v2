@@ -4,7 +4,7 @@ const dotenv = require('dotenv');
 const app = express();
 const courseRoute = require('./routes/courses');
 const userRoute = require('./routes/users');
-
+const PORT = process.env.PORT || 3001;
 dotenv.config();
 
 app.use(express.json());

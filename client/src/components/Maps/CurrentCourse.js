@@ -7,6 +7,7 @@ import SaveAsIcon from '@mui/icons-material/SaveAs';
 import { NavigationControl } from 'react-map-gl';
 import { GeolocateControl } from 'react-map-gl';
 import { ScaleControl } from 'react-map-gl';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 
 const TOKEN = process.env.REACT_APP_MAPBOX;
 
@@ -107,7 +108,7 @@ export default function CreateMap() {
                                 {
                                     (index === 0) ?
                                         // START
-                                        <div className='h-10 w-10 rounded-full bg-gradient-to-br from-lime-500/80 hover:from-lime-500/70 hover:to-lime-500/70 to-lime-500/80 border-2 border-lime-200/80 hover:border-lime-200/70 justify-center items-center'
+                                        <div className='h-10 w-10 rounded-full bg-gradient-to-br from-lime-500/90 hover:from-lime-500/70 hover:to-lime-500/70 to-lime-500/90 border-2 border-lime-200/90 hover:border-lime-200/70 justify-center items-center'
                                             onClick={() => {
                                                 handleMarkerClick(marker, marker.lat, marker.long)
                                             }}
@@ -119,7 +120,7 @@ export default function CreateMap() {
                                         :
                                         (index === checkpoints.length - 1) ?
                                             // FINISH
-                                            <div className='h-10 w-10 rounded-full bg-gradient-to-br from-yellow-500/80 hover:from-yellow-500/70 hover:to-yellow-500/70 to-yellow-500/80 border-2 border-yellow-200/80 hover:border-yellow-200/70 justify-center items-center'
+                                            <div className='h-10 w-10 rounded-full bg-gradient-to-br from-yellow-500/90 hover:from-yellow-500/70 hover:to-yellow-500/70 to-yellow-500/90 border-2 border-yellow-200/90 hover:border-yellow-200/70 justify-center items-center'
                                                 onClick={() => {
                                                     handleMarkerClick(marker, marker.lat, marker.long)
                                                 }}
@@ -130,7 +131,7 @@ export default function CreateMap() {
                                             </div>
                                             :
                                             (index === isSelectedCP) ?
-                                                <div className='h-10 w-10 rounded-full bg-gradient-to-br from-lime-500/80 hover:from-orange-500/70 hover:to-red-500/70 to-lime-500/80 border-2 border-blue-200/80 hover:border-sky-200/70 justify-center items-center animate-pulse'
+                                                <div className='h-10 w-10 rounded-full bg-gradient-to-br from-lime-500/90 hover:from-orange-500/70 hover:to-red-500/70 to-lime-500/90 border-2 border-blue-200/90 hover:border-sky-200/70 justify-center items-center animate-pulse'
                                                     onClick={() => {
                                                         handleMarkerClick(marker, marker.lat, marker.long)
                                                     }}
@@ -140,7 +141,7 @@ export default function CreateMap() {
                                                     </div>
                                                 </div>
                                                 :
-                                                <div className='h-10 w-10 rounded-full bg-gradient-to-br from-blue-500/80 hover:from-blue-500/70 hover:to-sky-500/70 to-blue-500/80 border-2 border-blue-200/80 hover:border-sky-200/70 justify-center items-center'
+                                                <div className='h-10 w-10 rounded-full bg-gradient-to-br from-blue-500/90 hover:from-blue-500/70 hover:to-sky-500/70 to-blue-500/90 border-2 border-blue-200/90 hover:border-sky-200/70 justify-center items-center'
                                                     onClick={() => {
                                                         handleMarkerClick(marker, marker.lat, marker.long)
                                                     }}
@@ -182,11 +183,11 @@ export default function CreateMap() {
                 })
             }
 
-            <div id='coordinates' className='flex w-full justify-center items-center absolute top-2 z-2' >
+            <div id='filter-menu' className='flex w-full justify-center items-center absolute top-2 z-2' >
                 <div
                     className='flex flex-col w-full mx-2 items-start justify-center'
                 >
-                    <div className='flex flex-col w-4/5 bg-slate-200/90 border-2 border-slate-100/80 rounded-md'>
+                    <div className='flex flex-col w-4/5 md:w-2/5 lg:w-1/4 bg-slate-200/90 border-2 border-slate-100/90 rounded-md'>
 
                         <div className='flex flex-row w-full rounded-md items-center justify-center'>
                             <div className='flex justify-center items-center'>
@@ -205,7 +206,7 @@ export default function CreateMap() {
 
                         <div className='flex flex-row w-full rounded-md items-center justify-center'>
                             <div className='flex justify-center items-center p-1'>
-                                <p className='text-white p-[0.2] px-2 bg-lime-600 rounded-full font-bold'>Current:</p>
+                                <p className='text-white p-[0.2] px-2 bg-lime-600/90 rounded-full font-bold'>Current:</p>
                             </div>
                             <div className='flex w-full justify-between items-center'>
                                 <div className='flex w-1/2 justify-center'>
@@ -222,47 +223,53 @@ export default function CreateMap() {
 
             </div>
 
-            {
-                showQuit && (
-                    <div
-                        id='save'
-                        className='flex w-full justify-center items-center relative h-full z-100 bg-black/80'
+            <div id='HUD' className='flex flex-col space-y-2 w-full justify-around items-center absolute bottom-20' >
+                <div id='checkpoints-array' className='flex flex-wrap w-full md:w-2/3 lg:w-1/2 justify-center space-x-4 items-center'>
+                    <div className='h-10 w-10 rounded-full bg-gradient-to-br from-lime-500/90 hover:from-lime-500/70 hover:to-lime-500/70 to-lime-500/90 border-2 border-lime-200/90 hover:border-lime-200/70 justify-center items-center'
                     >
-                        <div className='flex justify-center items-center h-full'>
-                            <form id='save-course-form'
-                                className='flex flex-col w-5/6 pb-4 space-y-4 justify-center items-center absolute bg-slate-200  rounded-xl border-2 p-2 shadow lg:scale-75'>
-                                <div className='flex flex-col w-full justify-center items-center space-y-1 p-2'>
-                                    <div className='flex w-full justify-between items-center mb-4'>
-                                        <p className='text-2xl text-center font-medium lg:text-4xl'>
-                                            Are you sure you want to quit Course Creation?
-                                        </p>
-                                    </div>
-                                    <p className='flex w-full justify-center items-center text-md text-center font-normal lg:text-xl'>
-                                        Your course's checkpoints will be lost if you quit.
-                                    </p>
-                                </div>
-                                <div className='flex w-2/3 space-x-8'>
-                                    <div className='flex w-1/2 bg-slate-400 rounded-md text-lg text-slate-100 p-1 justify-center items-center'
-                                        onClick={() => {
-                                            console.log('cancel quit modal')
-                                            setShowQuit(!showQuit)
-                                        }}>
-                                        Cancel
-                                    </div>
-                                    <div className='flex w-1/2 bg-red-500 rounded-md text-lg text-slate-100 p-1 justify-center items-center'
-                                        onClick={() => {
-                                            console.log('quit course creation')
-                                            setShowQuit(!setShowQuit)
-                                        }}>
-                                        Quit
-                                    </div>
-                                </div>
-                            </form>
+                        <div className='flex w-full justify-center h-full items-center text-md font-bold'>
+                            <CheckCircleIcon style={{ color: '#4A5f50' }} />
                         </div>
                     </div>
-                )
-            }
+                    <div className='h-10 w-10 rounded-full bg-gradient-to-br from-blue-500/90 hover:from-lime-500/70 hover:to-lime-500/70 to-sky-500/90 border-2 border-blue-200/90 hover:border-lime-200/70 justify-center items-center'
+                    >
+                        <div className='flex w-full justify-center h-full items-center text-md font-bold'>
+                            <CheckCircleIcon style={{ color: '#1f34f4' }} />
+                        </div>
+                    </div>
+                    <div className='h-10 w-10 rounded-full bg-gradient-to-br from-blue-500/90 hover:from-lime-500/70 hover:to-lime-500/70 to-sky-500/90 border-2 border-blue-200/90 hover:border-lime-200/70 justify-center items-center'
+                    >
+                        <div className='flex w-full justify-center h-full items-center text-md font-bold'>
+                            <CheckCircleIcon style={{ color: '#1f34f4' }} />
+                        </div>
+                    </div>
+                    <div className='h-10 w-10 rounded-full bg-gradient-to-br from-lime-500/90 hover:from-lime-500/70 hover:to-lime-500/70 to-lime-500/90 border-2 border-lime-200/90 hover:border-lime-200/70 justify-center items-center'
+                    >
+                        <div className='flex w-full justify-center h-full items-center text-lg font-bold'>
+                            {4}
+                        </div>
+                    </div>
+                    <div className='h-10 w-10 rounded-full bg-gradient-to-br from-lime-500/90 hover:from-lime-500/70 hover:to-lime-500/70 to-lime-500/90 border-2 border-lime-200/90 hover:border-lime-200/70 justify-center items-center'
+                    >
+                        <div className='flex w-full justify-center h-full items-center text-lg font-bold'>
+                            {5}
+                        </div>
+                    </div>
+                    <div className='h-10 w-10 rounded-full bg-gradient-to-br from-lime-500/90 hover:from-lime-500/70 hover:to-lime-500/70 to-lime-500/90 border-2 border-lime-200/90 hover:border-lime-200/70 justify-center items-center'
+                    >
+                        <div className='flex w-full justify-center h-full items-center text-lg font-bold'>
+                            {6}
+                        </div>
+                    </div>
+                    <div className='h-10 w-10 rounded-full bg-gradient-to-br from-yellow-500/90 hover:from-yellow-500/70 hover:to-yellow-500/70 to-orange-500/90 border-2 border-yellow-200/90 hover:border-lime-200/70 justify-center items-center'
+                    >
+                        <div className='flex w-full justify-center h-full items-center text-lg font-bold'>
+                            {7}
+                        </div>
+                    </div>
 
+                </div>
+            </div>
 
             <NavigationControl />
             <GeolocateControl />

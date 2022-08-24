@@ -83,6 +83,7 @@ export default function CreateMap() {
         checkpoints.push(checkpoint)
         // console.log('Adding Marker -- UPDATED CHECKPOINTS ARRAY:', checkpoints)
         setCourse(prev => ({ ...prev, checkpoints: checkpoints }));
+        setSelectedCP(!selectedCP);
     };
 
     const handleChange = (e) => {
@@ -208,11 +209,11 @@ export default function CreateMap() {
                     })
                 }
 
-                <div id='filter-menu' className='flex w-full px-2 space-x-2 justify-center items-center absolute  top-4 z-2' >
+                <div id='filter-menu' className='flex w-full px-2 space-x-2 justify-center items-center absolute top-2 z-2' >
 
-                    <div className='flex flex-col space-y-2 w-full md:w-2/3 lg:w-1/2 items-center bg-slate-200/90 p-3 rounded-xl border-2 border-slate-800/30 shadow'>
+                    <div className='flex flex-col space-y-2 w-2/3 md:w-2/3 lg:w-1/2 items-center justify-center bg-slate-200/90 p-3 rounded-xl border-2 border-slate-800/30 shadow'>
                         <div
-                            className='flex flex-col w-full items-center'
+                            className='flex flex-col w-full items-center justify-center'
                         >
                             <div className='flex w-full space-x-2'>
                                 <input id='geocode-search' placeholder='Search by location' className='flex  flex-col w-full z-2 rounded-lg p-2 border-2 border-slate-400' />
@@ -220,19 +221,19 @@ export default function CreateMap() {
 
                             <div className='flex flex-col w-full p-2 rounded-md items-center justify-center mt-2'>
                                 <div className='flex space-x-8'>
-                                    <p>Latitude: <b>{viewState.latitude.toFixed(4)}</b></p>
-                                    <p>Longitude: <b>{viewState.longitude.toFixed(4)}</b></p>
+                                    <p className='text-center'>Latitude: <b>{viewState.latitude.toFixed(4)}</b></p>
+                                    <p className='text-center'>Longitude: <b>{viewState.longitude.toFixed(4)}</b></p>
                                 </div>
-                                <div className='border-b border-slate-300 flex w-2/3' />
+                                <div className='border-b border-slate-300 flex w-5/6' />
                             </div>
                         </div>
 
                     </div>
-                    <div className='flex p-2 items-center justify-center bg-neutral-200/80 rounded-xl border-2 border-slate-100'
+                    {/* <div className='flex p-2 items-center justify-center bg-neutral-200/80 rounded-xl border-2 border-slate-100'
                         onClick={() => setShowQuit(!showQuit)}
                     >
                         <ExitToAppIcon />
-                    </div>
+                    </div> */}
                 </div >
                 <div id='HUD' className='flex flex-col space-y-2 w-full justify-around items-center absolute bottom-20' >
                     <div className='flex flex-wrap justify-center gap-2 w-5/6 p-2'>
@@ -243,7 +244,10 @@ export default function CreateMap() {
                                     (index === 0) ?
                                         // START
                                         <div className='h-10 w-10 rounded-full bg-gradient-to-br from-lime-500/80 hover:from-lime-500/70 hover:to-lime-500/70 to-lime-500/80 border-2 border-lime-200/80 hover:border-lime-200/70 justify-center items-center'
-                                            onClick={() => setViewState({ latitude: checkpoint.lat, longitude: checkpoint.long })}
+                                            onClick={() => {
+                                                setViewState({ latitude: checkpoint.lat, longitude: checkpoint.long })
+                                                setSelectedCP(!selectedCP)
+                                            }}
                                         >
                                             <div className='flex w-full justify-center h-full items-center text-md font-bold'>
                                                 {index + 1}
@@ -253,16 +257,20 @@ export default function CreateMap() {
                                         (index === checkpoints.length - 1) ?
                                             // FINISH
                                             <div className='h-10 w-10 rounded-full bg-gradient-to-br from-yellow-500/80 hover:from-yellow-500/70 hover:to-yellow-500/70 to-yellow-500/80 border-2 border-yellow-200/80 hover:border-yellow-200/70 justify-center items-center'
-                                                onClick={() => setViewState({ latitude: checkpoint.lat, longitude: checkpoint.long })}
-                                            >
+                                                onClick={() => {
+                                                    setViewState({ latitude: checkpoint.lat, longitude: checkpoint.long })
+                                                    setSelectedCP(!selectedCP)
+                                                }}                                            >
                                                 <div className='flex w-full justify-center h-full items-center text-md font-bold'>
                                                     {index + 1}
                                                 </div>
                                             </div>
                                             :
                                             <div className='h-10 w-10 rounded-full bg-gradient-to-br from-sky-500/80 hover:from-blue-500/70 hover:to-sky-500/70 to-blue-500/80 border-2 border-blue-200/80 hover:border-sky-200/70 justify-center items-center'
-                                                onClick={() => setViewState({ latitude: checkpoint.lat, longitude: checkpoint.long })}
-                                            >
+                                                onClick={() => {
+                                                    setViewState({ latitude: checkpoint.lat, longitude: checkpoint.long })
+                                                    setSelectedCP(!selectedCP)
+                                                }}                                            >
                                                 <div className='flex w-full justify-center h-full items-center text-md font-bold'>
                                                     {index + 1}
                                                 </div>

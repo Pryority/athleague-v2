@@ -17,9 +17,12 @@ import {
     Route,
     Link
 } from "react-router-dom";
+
 import { NavigationControl } from 'react-map-gl';
 import { GeolocateControl } from 'react-map-gl';
 import { ScaleControl } from 'react-map-gl';
+import WalletBalance from '../User/WalletBalance';
+import { ethers } from "ethers";
 
 const TOKEN = process.env.REACT_APP_MAPBOX;
 
@@ -219,6 +222,7 @@ export default function CreateMap() {
                 <div id='filter-menu' className='flex w-full px-2 space-x-2 justify-center items-center absolute top-2 z-2' >
 
                     <div className='flex flex-col space-y-2 w-2/3 md:w-2/3 lg:w-1/2 items-center justify-center bg-slate-200/90 p-3 rounded-xl border-2 border-slate-800/30 shadow'>
+                        <WalletBalance />
                         <div
                             className='flex flex-col w-full items-center justify-center'
                         >

@@ -17,6 +17,9 @@ import {
     Route,
     Link
 } from "react-router-dom";
+import { NavigationControl } from 'react-map-gl';
+import { GeolocateControl } from 'react-map-gl';
+import { ScaleControl } from 'react-map-gl';
 
 const TOKEN = process.env.REACT_APP_MAPBOX;
 
@@ -231,7 +234,7 @@ export default function CreateMap() {
                         <ExitToAppIcon />
                     </div>
                 </div >
-                <div id='HUD' className='flex flex-col space-y-2 w-full justify-around items-center absolute bottom-12' >
+                <div id='HUD' className='flex flex-col space-y-2 w-full justify-around items-center absolute bottom-20' >
                     <div className='flex flex-wrap justify-center gap-2 w-5/6 p-2'>
                         {checkpoints.map((checkpoint, index) => (
                             // <div className='rounded-full border shadow w-8 h-8 bg-slate-500' />
@@ -269,50 +272,66 @@ export default function CreateMap() {
                         ))}
                         {/* </div> */}
                     </div>
-                    <div id='checkpoints-array' className='flex w-full md:w-2/3 lg:w-1/2 p justify-around items-center'>
-                        <div id='undo-redo' className='flex justify-center space-x-1'>
-                            {
-                                (checkpoints.length === 0) ? (
-                                    <div className='flex flex-col w-12 h-12 space-y-2 justify-center items-center bg-slate-200 p-3 rounded-xl border-2 border-slate-300 shadow-md text-2xl font-black
+                    <div id='checkpoints-array' className='flex w-full md:w-2/3 lg:w-1/2 justify-around space-x-4 items-center'>
+                        <div id='undo-redo' className='flex w-1/3 justify-center'>
+                            <div className='flex w-full justify-center'>
+                                {
+                                    (checkpoints.length === 0) ? (
+                                        <div className='flex flex-col w-12 h-12 justify-center items-center bg-slate-200 p-3 rounded-xl border-2 border-slate-300 shadow-md text-2xl font-black
                                 opacity-50'
-                                    >
-                                        <UndoIcon />
-                                    </div>
-                                )
-                                    :
-                                    <div className='flex flex-col w-12 h-12 space-y-2 justify-center items-center bg-slate-200 p-3 rounded-xl border-2 border-slate-300 shadow-md text-2xl font-black'
-                                        onClick={() => {
-                                            checkpoints.pop();
-                                            console.log('Deleting previous Checkpoint -- UPDATED CHECKPOINTS ARRAY', checkpoints)
-                                            setViewState({ ...viewState })
-                                        }}
-                                    >
-                                        <UndoIcon />
-                                    </div>
-                            }
-
-                            <div className='flex flex-col w-12 h-12 space-y-2 justify-center items-center bg-slate-200 p-3 rounded-xl border-2 border-slate-300 shadow-md text-2xl font-black opacity-50'>
-                                <RedoIcon />
+                                        >
+                                            <UndoIcon />
+                                        </div>
+                                    )
+                                        :
+                                        <div className='flex flex-col w-12 h-12 justify-center items-center bg-slate-200 p-3 rounded-xl border-2 border-slate-300 shadow-md text-2xl font-black'
+                                            onClick={() => {
+                                                checkpoints.pop();
+                                                console.log('Deleting previous Checkpoint -- UPDATED CHECKPOINTS ARRAY', checkpoints)
+                                                setViewState({ ...viewState })
+                                            }}
+                                        >
+                                            <UndoIcon />
+                                        </div>
+                                }
+                                {/* <div className='flex flex-col w-full h-12 justify-center items-center bg-slate-200 p-3 rounded-xl border-2 border-slate-300 shadow-md text-2xl font-black opacity-50'>
+                                    <RedoIcon />
+                                </div> */}
                             </div>
                         </div>
+                        {(checkpoints.length <= 1) ? (
+                            <div className='flex w-1/3 justify-center'>
+                                <button className='flex space-x-2 w-full text-center items-center justify-center bg-green-500 border-2 border-lime-200 p-3 rounded-xl opacity-50'
+                                    type='submit'
+                                    onClick={() => {
+                                        setShowSave(!showSave);
+                                    }}
+                                >
+                                    <SaveAsIcon fontSize='small' style={{ fill: '#b8fa93' }} />
+                                </button>
+                            </div>
+                        ) :
+                            <div className='flex w-1/3 justify-center'>
+                                <button className='flex space-x-2 w-full text-center items-center justify-center bg-green-500 border-2 border-lime-200 p-3 rounded-xl'
+                                    type='submit'
+                                    onClick={() => {
+                                        setShowSave(!showSave);
+                                    }}
+                                >
+                                    <SaveAsIcon fontSize='small' style={{ fill: '#b8fa93' }} />
+                                </button>
+                            </div>
+                        }
 
-                        <div className='flex w-1/5 justify-center'>
-                            <div className='flex flex-col w-full h-12 space-y-2 justify-center items-center bg-red-200 p-3 rounded-xl border-2 border-red-300 shadow-md text-2xl font-black'
+
+                        <div className='flex w-1/3 justify-center'>
+                            <div className='flex flex-col w-12 h-12 justify-center items-center bg-red-200 p-3 rounded-xl border-2 border-red-300 shadow-md text-2xl font-black'
                                 onClick={() => setShowClear(true)}
                             >
                                 <DeleteForeverIcon style={{ fill: '#b02727' }} />
                             </div>
                         </div>
-                        <div className='flex w-1/5 justify-center'>
-                            <button className='flex space-x-2 w-full text-center items-center justify-center bg-green-500 border-2 border-lime-200 p-3 rounded-xl'
-                                type='submit'
-                                onClick={() => {
-                                    setShowSave(!showSave);
-                                }}
-                            >
-                                <SaveAsIcon fontSize='small' style={{ fill: '#b8fa93' }} />
-                            </button>
-                        </div>
+
                     </div>
                 </div>
                 {showIntro && (
@@ -480,6 +499,9 @@ export default function CreateMap() {
                     </div>
                 )
                 }
+                <NavigationControl />
+                <GeolocateControl />
+                <ScaleControl />
             </Map >
             <Routes>
                 <Route exact path="/" component={<CreateMap />} />

@@ -182,176 +182,46 @@ export default function CreateMap() {
                 })
             }
 
-            <div id='filter-menu' className='flex w-full px-2 space-x-2 justify-center items-center absolute top-2 z-2' >
-                <div className='flex flex-col space-y-2 w-4/5 md:w-2/3 lg:w-1/2 items-center justify-center bg-slate-200/90 p-3 rounded-xl border-2 border-slate-800/30 shadow'>
-                    <div
-                        className='flex flex-col w-full items-center justify-center'
-                    >
-                        <div className='flex w-full space-x-2'>
-                            <input id='geocode-search' placeholder='Search by location' className='flex  flex-col w-full z-2 rounded-lg p-2 border-2 border-slate-400' />
-                        </div>
+            <div id='coordinates' className='flex w-full justify-center items-center absolute top-2 z-2' >
+                <div
+                    className='flex flex-col w-full mx-2 items-start justify-center'
+                >
+                    <div className='flex flex-col w-4/5 bg-slate-200/90 border-2 border-slate-100/80 rounded-md'>
 
-                        <div className='flex flex-col w-full p-2 rounded-md items-center justify-center mt-2'>
-                            <div className='flex w-full justify-between'>
-                                <div className='flex w-4/5'>
-                                    <p className='text-slate-900'>Map Center:</p>
+                        <div className='flex flex-row w-full rounded-md items-center justify-center'>
+                            <div className='flex justify-center items-center'>
+                                <p className='text-slate-600 p-[0.2] px-2  rounded-full font-bold'>Center:</p>
+                            </div>
+                            <div className='flex w-full justify-between items-center'>
+                                <div className='flex w-1/2 justify-center'>
+                                    <p className='text-start text-slate-700'>Lat: <b>{viewState.latitude.toFixed(4)}</b></p>
                                 </div>
-
-                                <div className='flex w-full'>
-                                    <p className='text-center'>Lat: <b>{viewState.latitude.toFixed(4)}</b></p>
-                                </div>
-                                <div className='flex w-full'>
-                                    <p className='text-center'>Long: <b>{viewState.longitude.toFixed(4)}</b></p>
+                                <div className='flex w-1/2 justify-center'>
+                                    <p className='text-start text-slate-700'>Long: <b>{viewState.longitude.toFixed(4)}</b></p>
                                 </div>
                             </div>
-                            <div className='border-b border-slate-300 flex w-5/6' />
                         </div>
-                        <div className='flex flex-col w-full p-2 rounded-md items-center justify-center mt-2'>
-                            <div className='flex w-full justify-between'>
-                                <div className='flex w-4/5'>
-                                    <p className='text-slate-900'>Current:</p>
+                        <div className='border-b border-slate-300 flex w-full' />
+
+                        <div className='flex flex-row w-full rounded-md items-center justify-center'>
+                            <div className='flex justify-center items-center p-1'>
+                                <p className='text-white p-[0.2] px-2 bg-lime-600 rounded-full font-bold'>Current:</p>
+                            </div>
+                            <div className='flex w-full justify-between items-center'>
+                                <div className='flex w-1/2 justify-center'>
+                                    <p className='text-start'>Lat: <b>{currentPosition.latitude.toFixed(4)}</b></p>
                                 </div>
-                                <div className='flex w-full'>
-                                    <p className='text-center'>Lat: <b>{currentPosition.latitude.toFixed(4)}</b></p>
-                                </div>
-                                <div className='flex w-full'>
-                                    <p className='text-center'>Long: <b>{currentPosition.longitude.toFixed(4)}</b></p>
+                                <div className='flex w-1/2 justify-center'>
+                                    <p className='text-start'>Long: <b>{currentPosition.longitude.toFixed(4)}</b></p>
                                 </div>
                             </div>
-                            <div className='border-b border-slate-300 flex w-5/6' />
                         </div>
-                    </div>
 
+                    </div>
                 </div>
-                {/* <div className='flex p-2 items-center justify-center bg-neutral-200/80 rounded-xl border-2 border-slate-100'
-                        onClick={() => setShowQuit(!showQuit)}
-                    >
-                        <ExitToAppIcon />
-                    </div> */}
-            </div >
-            <div id='HUD' className='flex flex-col space-y-2 w-full justify-around items-center absolute bottom-20' >
-                <div id='checkpoints-array' className='flex w-full md:w-2/3 lg:w-1/2 justify-around space-x-4 items-center'>
-                    <div id='undo-redo' className='flex w-1/3 justify-center'>
-                        <div className='flex w-full justify-center'>
-                            {
-                                (checkpoints.length === 0) ? (
-                                    <div className='flex flex-col w-12 h-12 justify-center items-center bg-slate-200 p-3 rounded-xl border-2 border-slate-300 shadow-md text-2xl font-black
-                                opacity-50'
-                                    >
-                                        <UndoIcon />
-                                    </div>
-                                )
-                                    :
-                                    <div className='flex flex-col w-12 h-12 justify-center items-center bg-slate-200 p-3 rounded-xl border-2 border-slate-300 shadow-md text-2xl font-black'
-                                        onClick={() => {
-                                            checkpoints.pop();
-                                            console.log('Deleting previous Checkpoint -- UPDATED CHECKPOINTS ARRAY', checkpoints)
-                                            setViewState({ ...viewState })
-                                        }}
-                                    >
-                                        <UndoIcon />
-                                    </div>
-                            }
-                            {/* <div className='flex flex-col w-full h-12 justify-center items-center bg-slate-200 p-3 rounded-xl border-2 border-slate-300 shadow-md text-2xl font-black opacity-50'>
-                                    <RedoIcon />
-                                </div> */}
-                        </div>
-                    </div>
-                    {(checkpoints.length <= 1) ? (
-                        <div className='flex w-1/3 justify-center'>
-                            <button className='flex space-x-2 w-full text-center items-center justify-center bg-green-500 border-2 border-lime-200 p-3 rounded-xl opacity-50'
-                                type='submit'
-                                onClick={() => {
-                                    setShowSave(!showSave);
-                                }}
-                            >
-                                <SaveAsIcon fontSize='small' style={{ fill: '#b8fa93' }} />
-                            </button>
-                        </div>
-                    ) :
-                        <div className='flex w-1/3 justify-center'>
-                            <button className='flex space-x-2 w-full text-center items-center justify-center bg-green-500 border-2 border-lime-200 p-3 rounded-xl'
-                                type='submit'
-                                onClick={() => {
-                                    setShowSave(!showSave);
-                                }}
-                            >
-                                <SaveAsIcon fontSize='small' style={{ fill: '#b8fa93' }} />
-                            </button>
-                        </div>
-                    }
 
-                    <div className='flex w-1/3 justify-center'>
-                        <div className='flex flex-col w-12 h-12 justify-center items-center bg-red-200 p-3 rounded-xl border-2 border-red-300 shadow-md text-2xl font-black'
-                        >
-                            <DeleteForeverIcon style={{ fill: '#b02727' }} />
-                        </div>
-                    </div>
-
-                </div>
             </div>
 
-            {
-                showSave && (
-                    <div
-                        id='save'
-                        className='flex w-full justify-center items-center relative h-full z-100 bg-black/80'
-                    >
-                        <div className='flex justify-center items-center h-full'>
-                            <form id='save-course-form'
-                                className='flex flex-col lg:w-3/5 w-5/6 pb-4 space-y-4 justify-center items-center absolute bg-slate-200  rounded-xl border-2 p-2 shadow lg:scale-75 shadow-lg'>
-                                <div className='flex flex-col w-full justify-center items-center space-y-4 p-2'>
-                                    <div className='flex w-full justify-between items-center'>
-                                        <p className='text-xl text-start font-extrabold lg:text-4xl'>
-                                            Save Your Course
-                                        </p>
-
-                                        <div className='bg-slate-300 rounded-full p-1'
-                                            onClick={() => {
-                                                setShowSave(!showSave)
-                                                console.log('exiting')
-
-                                            }}
-                                        >
-                                            <ClearIcon />
-                                        </div>
-                                    </div>
-                                    <input
-                                        placeholder='Course name'
-                                        name='title'
-                                        className='flex w-full p-1  rounded-md bg-blue-50/0 
-                                    text-2xl text-start font-extrabold lg:text-4xl uppercase'
-                                    />
-                                    <textarea
-                                        name='desc'
-                                        placeholder='Course description'
-                                        className='flex w-full h-16 p-1 rounded-md border-2 border-slate-500'
-                                    />
-                                    <div className='grid grid-cols-1 gap-2 md:grid-cols-2 w-2/3 justify-center p-1'>
-                                        <p className='w-full text-start font-medium text-lg'>Checkpoints: {checkpoints.length}</p>
-                                        <p className='w-full text-start font-medium text-lg'>Type: <select className='rounded-md p-1'>
-                                            <option value="volvo">Objective</option>
-                                            <option value="saab">Adventure</option>
-                                            <option value="mercedes">Lookout</option>
-                                            <option value="audi">Freestyle</option>
-                                        </select></p>
-                                    </div>
-                                </div>
-                                {/* SAVE BUTTON */}
-                                <div className='flex  items-center space-x-2 bg-green-500 hover:bg-green-600 rounded-md text-xl font-bold text-slate-100 p-1 px-8 lg:p-2 lg:px-6'
-                                    onClick={() => {
-                                        console.log('course saved')
-                                        setShowSave(!showSave)
-                                        console.log(course.checkpoints.length)
-                                        console.log(course.title)
-                                    }}>
-                                    <SaveAsIcon />
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                )
-            }
             {
                 showQuit && (
                     <div

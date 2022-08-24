@@ -37,7 +37,7 @@ export default function CreateMap() {
         "checkpoints": ""
     })
     const [checkpoints, setCheckpoints] = useState([]);
-    const [selectedCP, setSelectedCP] = useState({});
+    const [isSelectedCP, setIsSelectedCP] = useState(null);
     const [courseName, setCourseName] = useState('');
     const [showIntro, setShowIntro] = useState(true);
     const [showSave, setShowSave] = useState(false);
@@ -48,12 +48,13 @@ export default function CreateMap() {
     const mapRef = useRef();
     const handleMarkerClick = (cp, lat, long) => {
         console.log(cp)
-        setSelectedCP(cp);
+        setIsSelectedCP(true);
+        setCanAddCP(false);
         setViewState({
             latitude: lat,
             longitude: long
         })
-        console.log(`Current Course ID: ${selectedCP}`)
+        console.log(`Current Course ID: ${isSelectedCP}`)
         console.log(`Course Coordinates: \n Lat-${lat} Long-${long}`)
     }
 
@@ -83,7 +84,7 @@ export default function CreateMap() {
         checkpoints.push(checkpoint)
         // console.log('Adding Marker -- UPDATED CHECKPOINTS ARRAY:', checkpoints)
         setCourse(prev => ({ ...prev, checkpoints: checkpoints }));
-        setSelectedCP(!selectedCP);
+        setIsSelectedCP(!isSelectedCP);
     };
 
     const handleChange = (e) => {
@@ -94,12 +95,9 @@ export default function CreateMap() {
         console.log('Saved Course: ', course)
     }
     console.log(course)
-    const numeral = require('numeral');
+    console.log(isSelectedCP)
+    console.log('Can add?: ', canAddCP)
 
-    // setInterval(() => {
-    //     const { rss, heapTotal } = process.memoryUsage();
-    //     console.log('rss', numeral(rss).format('0.0 ib'), 'heapTotal', numeral(heapTotal).format('0.0 ib'))
-    // }, 5000)
 
     useEffect(() => {
     }, [])
@@ -142,7 +140,7 @@ export default function CreateMap() {
                                             <div className='h-10 w-10 rounded-full bg-gradient-to-br from-lime-500/80 hover:from-lime-500/70 hover:to-lime-500/70 to-lime-500/80 border-2 border-lime-200/80 hover:border-lime-200/70 justify-center items-center'
                                                 onClick={() => {
                                                     handleMarkerClick(marker, marker.lat, marker.long)
-                                                    setCanAddCP(!canAddCP)
+                                                    setCanAddCP(false)
                                                 }}
                                             >
                                                 <div className='flex w-full justify-center h-full items-center text-md font-bold'>
@@ -153,16 +151,22 @@ export default function CreateMap() {
                                             (index === checkpoints.length - 1) ?
                                                 // FINISH
                                                 <div className='h-10 w-10 rounded-full bg-gradient-to-br from-yellow-500/80 hover:from-yellow-500/70 hover:to-yellow-500/70 to-yellow-500/80 border-2 border-yellow-200/80 hover:border-yellow-200/70 justify-center items-center'
-                                                    onClick={() => handleMarkerClick(marker, marker.lat, marker.long)}
+                                                    onClick={() => {
+                                                        handleMarkerClick(marker, marker.lat, marker.long)
+                                                        setCanAddCP(false)
+                                                    }}
                                                 >
                                                     <div className='flex w-full justify-center h-full items-center text-md font-bold'>
                                                         {index + 1}
                                                     </div>
                                                 </div>
                                                 :
-                                                (index === selectedCP) ?
+                                                (index === isSelectedCP) ?
                                                     <div className='h-10 w-10 rounded-full bg-gradient-to-br from-lime-500/80 hover:from-orange-500/70 hover:to-red-500/70 to-lime-500/80 border-2 border-blue-200/80 hover:border-sky-200/70 justify-center items-center animate-pulse'
-                                                        onClick={() => handleMarkerClick(marker, marker.lat, marker.long)}
+                                                        onClick={() => {
+                                                            handleMarkerClick(marker, marker.lat, marker.long)
+                                                            setCanAddCP(false)
+                                                        }}
                                                     >
                                                         <div className='flex w-full justify-center h-full items-center text-md font-bold'>
                                                             {index + 1}
@@ -170,7 +174,10 @@ export default function CreateMap() {
                                                     </div>
                                                     :
                                                     <div className='h-10 w-10 rounded-full bg-gradient-to-br from-blue-500/80 hover:from-blue-500/70 hover:to-sky-500/70 to-blue-500/80 border-2 border-blue-200/80 hover:border-sky-200/70 justify-center items-center'
-                                                        onClick={() => handleMarkerClick(marker, marker.lat, marker.long)}
+                                                        onClick={() => {
+                                                            handleMarkerClick(marker, marker.lat, marker.long)
+                                                            setCanAddCP(false)
+                                                        }}
                                                     >
                                                         <div className='flex w-full justify-center h-full items-center text-md font-bold'>
                                                             {index + 1}
@@ -180,7 +187,7 @@ export default function CreateMap() {
                                 </Marker>
 
                                 {
-                                    selectedCP.long === marker.long && (
+                                    isSelectedCP.long === marker.long && (
                                         <Popup
                                             latitude={marker.lat}
                                             longitude={marker.long}
@@ -246,7 +253,7 @@ export default function CreateMap() {
                                         <div className='h-10 w-10 rounded-full bg-gradient-to-br from-lime-500/80 hover:from-lime-500/70 hover:to-lime-500/70 to-lime-500/80 border-2 border-lime-200/80 hover:border-lime-200/70 justify-center items-center'
                                             onClick={() => {
                                                 setViewState({ latitude: checkpoint.lat, longitude: checkpoint.long })
-                                                setSelectedCP(!selectedCP)
+                                                setIsSelectedCP(!isSelectedCP)
                                             }}
                                         >
                                             <div className='flex w-full justify-center h-full items-center text-md font-bold'>
@@ -259,7 +266,7 @@ export default function CreateMap() {
                                             <div className='h-10 w-10 rounded-full bg-gradient-to-br from-yellow-500/80 hover:from-yellow-500/70 hover:to-yellow-500/70 to-yellow-500/80 border-2 border-yellow-200/80 hover:border-yellow-200/70 justify-center items-center'
                                                 onClick={() => {
                                                     setViewState({ latitude: checkpoint.lat, longitude: checkpoint.long })
-                                                    setSelectedCP(!selectedCP)
+                                                    setIsSelectedCP(!isSelectedCP)
                                                 }}                                            >
                                                 <div className='flex w-full justify-center h-full items-center text-md font-bold'>
                                                     {index + 1}
@@ -269,7 +276,7 @@ export default function CreateMap() {
                                             <div className='h-10 w-10 rounded-full bg-gradient-to-br from-sky-500/80 hover:from-blue-500/70 hover:to-sky-500/70 to-blue-500/80 border-2 border-blue-200/80 hover:border-sky-200/70 justify-center items-center'
                                                 onClick={() => {
                                                     setViewState({ latitude: checkpoint.lat, longitude: checkpoint.long })
-                                                    setSelectedCP(!selectedCP)
+                                                    setIsSelectedCP(!isSelectedCP)
                                                 }}                                            >
                                                 <div className='flex w-full justify-center h-full items-center text-md font-bold'>
                                                     {index + 1}

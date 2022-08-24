@@ -98,6 +98,8 @@ export default function CreateMap() {
         console.log('Saved Course: ', course)
     }
 
+    console.log(checkpoints)
+
     useEffect(() => {
 
     }, [])

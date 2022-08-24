@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { ethers } from 'ethers';
-import Contract from '../artifacts/contracts/CourseTokens.sol/CourseTokens.json';
-import NFTImage from './NFT/NFTCard';
-import trail from '../assets/images/trail.png'
+import Contract from '../../artifacts/contracts/CourseTokens.sol/CourseTokens.json';
+import NFTImage from './NFTCard';
+import trail from '../../assets/images/trail.png'
 
 const CONTRACT_ADDRESS = '0x5fbdb2315678afecb367f032d93f642f64180aa3';
 const provider = new ethers.providers.Web3Provider(window.ethereum);

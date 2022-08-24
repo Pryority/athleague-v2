@@ -1,23 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react'
 import Map, { Marker, Popup } from 'react-map-gl';
-import axios from 'axios';
 import UndoIcon from '@mui/icons-material/Undo';
-import RedoIcon from '@mui/icons-material/Redo';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import ClearIcon from '@mui/icons-material/Clear';
-import trail from '../../assets/images/trail.png'
-import demo from '../../assets/images/demo.png'
 import SaveAsIcon from '@mui/icons-material/SaveAs';
-import ExitToAppIcon from '@mui/icons-material/ExitToApp';
-import CourseMap from './CourseMap';
-
-import {
-    BrowserRouter as Router,
-    Routes,
-    Route,
-    Link
-} from "react-router-dom";
-
 import { NavigationControl } from 'react-map-gl';
 import { GeolocateControl } from 'react-map-gl';
 import { ScaleControl } from 'react-map-gl';
@@ -40,17 +26,15 @@ export default function CreateMap() {
     const [checkpoints, setCheckpoints] = useState([]);
     const [isSelectedCP, setIsSelectedCP] = useState(null);
     const [courseName, setCourseName] = useState('');
-    const [showIntro, setShowIntro] = useState(true);
     const [showSave, setShowSave] = useState(false);
     const [showQuit, setShowQuit] = useState(false);
-    const [canAddCP, setCanAddCP] = useState(true);
-    const [showClear, setShowClear] = useState(false);
+    const [currentPosition, setCurrentPosition] = useState(null);
 
     const mapRef = useRef();
+
     const handleMarkerClick = (cp, lat, long) => {
         console.log(cp)
         setIsSelectedCP(true);
-        setCanAddCP(false);
         setViewState({
             latitude: lat,
             longitude: long
@@ -58,44 +42,6 @@ export default function CreateMap() {
         console.log(`Current Course ID: ${isSelectedCP}`)
         console.log(`Course Coordinates: \n Lat-${lat} Long-${long}`)
     }
-
-    const saveCourse = async (lat, lng) => {
-        try {
-            const res = await axios.post('/api/courses', {
-                "username": "<USERNAME>",
-                "title": "<TITLE>",
-                "type": "<TYPE>",
-                "desc": "<DESCRIPTION>",
-                "rating": 5,
-                "lat": lat,
-                "long": lng
-            })
-            console.log('🟢 CHECKPOINTS:', res.data)
-            // setCourses(res.data)
-        } catch (err) {
-            console.log('<><><><><><><>', err, '<><><><><><><>')
-        }
-    }
-
-    const handleAddMarker = (loc) => {
-        const checkpoint = {
-            "lat": loc.lat,
-            "long": loc.long
-        }
-        checkpoints.push(checkpoint)
-        // console.log('Adding Marker -- UPDATED CHECKPOINTS ARRAY:', checkpoints)
-        setCourse(prev => ({ ...prev, checkpoints: checkpoints }));
-        setIsSelectedCP(!isSelectedCP);
-    };
-
-    const handleChange = (e) => {
-        setCourse(prev => ({ ...prev, [e.target.name]: e.target.value, checkpoints: checkpoints }));
-    }
-
-    const handleSaveFormSubmit = () => {
-        console.log('Saved Course: ', course)
-    }
-
 
     const options = {
         enableHighAccuracy: true,
@@ -112,7 +58,8 @@ export default function CreateMap() {
 
     function success(pos) {
         const crd = pos.coords;
-
+        setCurrentPosition(crd);
+        console.log('GeoLocation', currentPosition)
         if (target.latitude === crd.latitude && target.longitude === crd.longitude) {
             console.log('Congratulations, you reached the target');
             navigator.geolocation.clearWatch(id);
@@ -129,10 +76,9 @@ export default function CreateMap() {
 
     console.log(navigator.geolocation.getCurrentPosition(success, error, options))
     id = navigator.geolocation.watchPosition(success, error, options);
-    console.log(id)
+    console.log('ID: ', id)
 
     useEffect(() => {
-
     }, [])
 
     return (
@@ -145,13 +91,6 @@ export default function CreateMap() {
             mapStyle="mapbox://styles/mapbox/streets-v9"
             className='relative'
             minZoom={2}
-            onClick={(e) => {
-                if (canAddCP) {
-                    handleAddMarker({ lat: e.lngLat.lat, long: e.lngLat.lng })
-                    setViewState({ ...viewState })
-                }
-                setCanAddCP(true)
-            }}
         >
             {
                 checkpoints.map((marker, index, key) => {
@@ -164,7 +103,6 @@ export default function CreateMap() {
                                 anchor="top"
                                 offset={[-5, -20]}
                                 scale={2}
-                                onClick={() => setCanAddCP(false)}
                             >
                                 {
                                     (index === 0) ?
@@ -172,7 +110,6 @@ export default function CreateMap() {
                                         <div className='h-10 w-10 rounded-full bg-gradient-to-br from-lime-500/80 hover:from-lime-500/70 hover:to-lime-500/70 to-lime-500/80 border-2 border-lime-200/80 hover:border-lime-200/70 justify-center items-center'
                                             onClick={() => {
                                                 handleMarkerClick(marker, marker.lat, marker.long)
-                                                setCanAddCP(false)
                                             }}
                                         >
                                             <div className='flex w-full justify-center h-full items-center text-md font-bold'>
@@ -185,7 +122,6 @@ export default function CreateMap() {
                                             <div className='h-10 w-10 rounded-full bg-gradient-to-br from-yellow-500/80 hover:from-yellow-500/70 hover:to-yellow-500/70 to-yellow-500/80 border-2 border-yellow-200/80 hover:border-yellow-200/70 justify-center items-center'
                                                 onClick={() => {
                                                     handleMarkerClick(marker, marker.lat, marker.long)
-                                                    setCanAddCP(false)
                                                 }}
                                             >
                                                 <div className='flex w-full justify-center h-full items-center text-md font-bold'>
@@ -197,7 +133,6 @@ export default function CreateMap() {
                                                 <div className='h-10 w-10 rounded-full bg-gradient-to-br from-lime-500/80 hover:from-orange-500/70 hover:to-red-500/70 to-lime-500/80 border-2 border-blue-200/80 hover:border-sky-200/70 justify-center items-center animate-pulse'
                                                     onClick={() => {
                                                         handleMarkerClick(marker, marker.lat, marker.long)
-                                                        setCanAddCP(false)
                                                     }}
                                                 >
                                                     <div className='flex w-full justify-center h-full items-center text-md font-bold'>
@@ -208,7 +143,6 @@ export default function CreateMap() {
                                                 <div className='h-10 w-10 rounded-full bg-gradient-to-br from-blue-500/80 hover:from-blue-500/70 hover:to-sky-500/70 to-blue-500/80 border-2 border-blue-200/80 hover:border-sky-200/70 justify-center items-center'
                                                     onClick={() => {
                                                         handleMarkerClick(marker, marker.lat, marker.long)
-                                                        setCanAddCP(false)
                                                     }}
                                                 >
                                                     <div className='flex w-full justify-center h-full items-center text-md font-bold'>
@@ -249,8 +183,7 @@ export default function CreateMap() {
             }
 
             <div id='filter-menu' className='flex w-full px-2 space-x-2 justify-center items-center absolute top-2 z-2' >
-
-                <div className='flex flex-col space-y-2 w-2/3 md:w-2/3 lg:w-1/2 items-center justify-center bg-slate-200/90 p-3 rounded-xl border-2 border-slate-800/30 shadow'>
+                <div className='flex flex-col space-y-2 w-4/5 md:w-2/3 lg:w-1/2 items-center justify-center bg-slate-200/90 p-3 rounded-xl border-2 border-slate-800/30 shadow'>
                     <div
                         className='flex flex-col w-full items-center justify-center'
                     >
@@ -259,9 +192,31 @@ export default function CreateMap() {
                         </div>
 
                         <div className='flex flex-col w-full p-2 rounded-md items-center justify-center mt-2'>
-                            <div className='flex space-x-8'>
-                                <p className='text-center'>Latitude: <b>{viewState.latitude.toFixed(4)}</b></p>
-                                <p className='text-center'>Longitude: <b>{viewState.longitude.toFixed(4)}</b></p>
+                            <div className='flex w-full justify-between'>
+                                <div className='flex w-4/5'>
+                                    <p className='text-slate-900'>Map Center:</p>
+                                </div>
+
+                                <div className='flex w-full'>
+                                    <p className='text-center'>Lat: <b>{viewState.latitude.toFixed(4)}</b></p>
+                                </div>
+                                <div className='flex w-full'>
+                                    <p className='text-center'>Long: <b>{viewState.longitude.toFixed(4)}</b></p>
+                                </div>
+                            </div>
+                            <div className='border-b border-slate-300 flex w-5/6' />
+                        </div>
+                        <div className='flex flex-col w-full p-2 rounded-md items-center justify-center mt-2'>
+                            <div className='flex w-full justify-between'>
+                                <div className='flex w-4/5'>
+                                    <p className='text-slate-900'>Current:</p>
+                                </div>
+                                <div className='flex w-full'>
+                                    <p className='text-center'>Lat: <b>{currentPosition.latitude.toFixed(4)}</b></p>
+                                </div>
+                                <div className='flex w-full'>
+                                    <p className='text-center'>Long: <b>{currentPosition.longitude.toFixed(4)}</b></p>
+                                </div>
                             </div>
                             <div className='border-b border-slate-300 flex w-5/6' />
                         </div>
@@ -275,50 +230,6 @@ export default function CreateMap() {
                     </div> */}
             </div >
             <div id='HUD' className='flex flex-col space-y-2 w-full justify-around items-center absolute bottom-20' >
-                <div className='flex flex-wrap justify-center gap-2 w-5/6 p-2'>
-                    {checkpoints.map((checkpoint, index) => (
-                        // <div className='rounded-full border shadow w-8 h-8 bg-slate-500' />
-                        <>
-                            {
-                                (index === 0) ?
-                                    // START
-                                    <div className='h-10 w-10 rounded-full bg-gradient-to-br from-lime-500/80 hover:from-lime-500/70 hover:to-lime-500/70 to-lime-500/80 border-2 border-lime-200/80 hover:border-lime-200/70 justify-center items-center'
-                                        onClick={() => {
-                                            setViewState({ latitude: checkpoint.lat, longitude: checkpoint.long })
-                                            setIsSelectedCP(!isSelectedCP)
-                                        }}
-                                    >
-                                        <div className='flex w-full justify-center h-full items-center text-md font-bold'>
-                                            {index + 1}
-                                        </div>
-                                    </div>
-                                    :
-                                    (index === checkpoints.length - 1) ?
-                                        // FINISH
-                                        <div className='h-10 w-10 rounded-full bg-gradient-to-br from-yellow-500/80 hover:from-yellow-500/70 hover:to-yellow-500/70 to-yellow-500/80 border-2 border-yellow-200/80 hover:border-yellow-200/70 justify-center items-center'
-                                            onClick={() => {
-                                                setViewState({ latitude: checkpoint.lat, longitude: checkpoint.long })
-                                                setIsSelectedCP(!isSelectedCP)
-                                            }}                                            >
-                                            <div className='flex w-full justify-center h-full items-center text-md font-bold'>
-                                                {index + 1}
-                                            </div>
-                                        </div>
-                                        :
-                                        <div className='h-10 w-10 rounded-full bg-gradient-to-br from-sky-500/80 hover:from-blue-500/70 hover:to-sky-500/70 to-blue-500/80 border-2 border-blue-200/80 hover:border-sky-200/70 justify-center items-center'
-                                            onClick={() => {
-                                                setViewState({ latitude: checkpoint.lat, longitude: checkpoint.long })
-                                                setIsSelectedCP(!isSelectedCP)
-                                            }}                                            >
-                                            <div className='flex w-full justify-center h-full items-center text-md font-bold'>
-                                                {index + 1}
-                                            </div>
-                                        </div>
-                            }
-                        </>
-                    ))}
-                    {/* </div> */}
-                </div>
                 <div id='checkpoints-array' className='flex w-full md:w-2/3 lg:w-1/2 justify-around space-x-4 items-center'>
                     <div id='undo-redo' className='flex w-1/3 justify-center'>
                         <div className='flex w-full justify-center'>
@@ -370,10 +281,8 @@ export default function CreateMap() {
                         </div>
                     }
 
-
                     <div className='flex w-1/3 justify-center'>
                         <div className='flex flex-col w-12 h-12 justify-center items-center bg-red-200 p-3 rounded-xl border-2 border-red-300 shadow-md text-2xl font-black'
-                            onClick={() => setShowClear(true)}
                         >
                             <DeleteForeverIcon style={{ fill: '#b02727' }} />
                         </div>
@@ -382,148 +291,109 @@ export default function CreateMap() {
                 </div>
             </div>
 
-            {showSave && (
-                <div
-                    id='save'
-                    className='flex w-full justify-center items-center relative h-full z-100 bg-black/80'
-                >
-                    <div className='flex justify-center items-center h-full'>
-                        <form id='save-course-form'
-                            className='flex flex-col lg:w-3/5 w-5/6 pb-4 space-y-4 justify-center items-center absolute bg-slate-200  rounded-xl border-2 p-2 shadow lg:scale-75 shadow-lg'>
-                            <div className='flex flex-col w-full justify-center items-center space-y-4 p-2'>
-                                <div className='flex w-full justify-between items-center'>
-                                    <p className='text-xl text-start font-extrabold lg:text-4xl'>
-                                        Save Your Course
-                                    </p>
+            {
+                showSave && (
+                    <div
+                        id='save'
+                        className='flex w-full justify-center items-center relative h-full z-100 bg-black/80'
+                    >
+                        <div className='flex justify-center items-center h-full'>
+                            <form id='save-course-form'
+                                className='flex flex-col lg:w-3/5 w-5/6 pb-4 space-y-4 justify-center items-center absolute bg-slate-200  rounded-xl border-2 p-2 shadow lg:scale-75 shadow-lg'>
+                                <div className='flex flex-col w-full justify-center items-center space-y-4 p-2'>
+                                    <div className='flex w-full justify-between items-center'>
+                                        <p className='text-xl text-start font-extrabold lg:text-4xl'>
+                                            Save Your Course
+                                        </p>
 
-                                    <div className='bg-slate-300 rounded-full p-1'
-                                        onClick={() => {
-                                            setShowSave(!showSave)
-                                            console.log('exiting')
+                                        <div className='bg-slate-300 rounded-full p-1'
+                                            onClick={() => {
+                                                setShowSave(!showSave)
+                                                console.log('exiting')
 
-                                        }}
-                                    >
-                                        <ClearIcon />
+                                            }}
+                                        >
+                                            <ClearIcon />
+                                        </div>
+                                    </div>
+                                    <input
+                                        placeholder='Course name'
+                                        name='title'
+                                        className='flex w-full p-1  rounded-md bg-blue-50/0 
+                                    text-2xl text-start font-extrabold lg:text-4xl uppercase'
+                                    />
+                                    <textarea
+                                        name='desc'
+                                        placeholder='Course description'
+                                        className='flex w-full h-16 p-1 rounded-md border-2 border-slate-500'
+                                    />
+                                    <div className='grid grid-cols-1 gap-2 md:grid-cols-2 w-2/3 justify-center p-1'>
+                                        <p className='w-full text-start font-medium text-lg'>Checkpoints: {checkpoints.length}</p>
+                                        <p className='w-full text-start font-medium text-lg'>Type: <select className='rounded-md p-1'>
+                                            <option value="volvo">Objective</option>
+                                            <option value="saab">Adventure</option>
+                                            <option value="mercedes">Lookout</option>
+                                            <option value="audi">Freestyle</option>
+                                        </select></p>
                                     </div>
                                 </div>
-                                <input
-                                    placeholder='Course name'
-                                    name='title'
-                                    className='flex w-full p-1  rounded-md bg-blue-50/0 
-                                    text-2xl text-start font-extrabold lg:text-4xl uppercase'
-                                    onChange={handleChange}
-                                />
-                                <textarea
-                                    name='desc'
-                                    placeholder='Course description'
-                                    className='flex w-full h-16 p-1 rounded-md border-2 border-slate-500'
-                                    onChange={handleChange}
-                                />
-                                <div className='grid grid-cols-1 gap-2 md:grid-cols-2 w-2/3 justify-center p-1'>
-                                    <p className='w-full text-start font-medium text-lg'>Checkpoints: {checkpoints.length}</p>
-                                    <p className='w-full text-start font-medium text-lg'>Type: <select className='rounded-md p-1'>
-                                        <option value="volvo">Objective</option>
-                                        <option value="saab">Adventure</option>
-                                        <option value="mercedes">Lookout</option>
-                                        <option value="audi">Freestyle</option>
-                                    </select></p>
-                                </div>
-                            </div>
-                            {/* SAVE BUTTON */}
-                            <Link to='/create'>
+                                {/* SAVE BUTTON */}
                                 <div className='flex  items-center space-x-2 bg-green-500 hover:bg-green-600 rounded-md text-xl font-bold text-slate-100 p-1 px-8 lg:p-2 lg:px-6'
                                     onClick={() => {
                                         console.log('course saved')
                                         setShowSave(!showSave)
                                         console.log(course.checkpoints.length)
                                         console.log(course.title)
-                                        handleSaveFormSubmit()
                                     }}>
                                     <SaveAsIcon />
                                 </div>
-                            </Link>
-
-                        </form>
+                            </form>
+                        </div>
                     </div>
-                </div>
-            )
+                )
             }
-            {showQuit && (
-                <div
-                    id='save'
-                    className='flex w-full justify-center items-center relative h-full z-100 bg-black/80'
-                >
-                    <div className='flex justify-center items-center h-full'>
-                        <form id='save-course-form'
-                            className='flex flex-col w-5/6 pb-4 space-y-4 justify-center items-center absolute bg-slate-200  rounded-xl border-2 p-2 shadow lg:scale-75'>
-                            <div className='flex flex-col w-full justify-center items-center space-y-1 p-2'>
-                                <div className='flex w-full justify-between items-center mb-4'>
-                                    <p className='text-2xl text-center font-medium lg:text-4xl'>
-                                        Are you sure you want to quit Course Creation?
+            {
+                showQuit && (
+                    <div
+                        id='save'
+                        className='flex w-full justify-center items-center relative h-full z-100 bg-black/80'
+                    >
+                        <div className='flex justify-center items-center h-full'>
+                            <form id='save-course-form'
+                                className='flex flex-col w-5/6 pb-4 space-y-4 justify-center items-center absolute bg-slate-200  rounded-xl border-2 p-2 shadow lg:scale-75'>
+                                <div className='flex flex-col w-full justify-center items-center space-y-1 p-2'>
+                                    <div className='flex w-full justify-between items-center mb-4'>
+                                        <p className='text-2xl text-center font-medium lg:text-4xl'>
+                                            Are you sure you want to quit Course Creation?
+                                        </p>
+                                    </div>
+                                    <p className='flex w-full justify-center items-center text-md text-center font-normal lg:text-xl'>
+                                        Your course's checkpoints will be lost if you quit.
                                     </p>
                                 </div>
-                                <p className='flex w-full justify-center items-center text-md text-center font-normal lg:text-xl'>
-                                    Your course's checkpoints will be lost if you quit.
-                                </p>
-                            </div>
-                            <div className='flex w-2/3 space-x-8'>
-                                <div className='flex w-1/2 bg-slate-400 rounded-md text-lg text-slate-100 p-1 justify-center items-center'
-                                    onClick={() => {
-                                        console.log('cancel quit modal')
-                                        setShowQuit(!showQuit)
-                                    }}>
-                                    Cancel
+                                <div className='flex w-2/3 space-x-8'>
+                                    <div className='flex w-1/2 bg-slate-400 rounded-md text-lg text-slate-100 p-1 justify-center items-center'
+                                        onClick={() => {
+                                            console.log('cancel quit modal')
+                                            setShowQuit(!showQuit)
+                                        }}>
+                                        Cancel
+                                    </div>
+                                    <div className='flex w-1/2 bg-red-500 rounded-md text-lg text-slate-100 p-1 justify-center items-center'
+                                        onClick={() => {
+                                            console.log('quit course creation')
+                                            setShowQuit(!setShowQuit)
+                                        }}>
+                                        Quit
+                                    </div>
                                 </div>
-                                <div className='flex w-1/2 bg-red-500 rounded-md text-lg text-slate-100 p-1 justify-center items-center'
-                                    onClick={() => {
-                                        console.log('quit course creation')
-                                        setShowQuit(!setShowQuit)
-                                    }}>
-                                    Quit
-                                </div>
-                            </div>
-                        </form>
+                            </form>
+                        </div>
                     </div>
-                </div>
-            )}
-
-            {showClear && (
-                <div
-                    id='save'
-                    className='flex w-full justify-center items-center relative h-full z-100 bg-black/80'
-                >
-                    <div className='flex justify-center items-center h-full'>
-                        <form id='save-course-form'
-                            className='flex flex-col w-5/6 pb-4 space-y-4 justify-center items-center absolute bg-slate-200  rounded-xl border-2 p-2 shadow lg:scale-75'>
-                            <div className='flex flex-col w-full justify-center items-center space-y-1 p-2'>
-                                <div className='flex w-full justify-center items-center'>
-                                    <p className='text-2xl text-center font-medium lg:text-4xl'>
-                                        Clear ALL Checkpoints?
-                                    </p>
-                                </div>
-                            </div>
-                            <div className='flex w-2/3 space-x-8'>
-                                <div className='flex w-1/2 bg-slate-400 rounded-md text-lg text-slate-100 p-1 justify-center items-center'
-                                    onClick={() => {
-                                        console.log('cancel quit modal')
-                                        setShowClear(!showClear)
-                                    }}>
-                                    Cancel
-                                </div>
-                                <div className='flex w-1/2 bg-red-500 rounded-md text-lg text-slate-100 p-1 justify-center items-center'
-                                    onClick={() => {
-                                        console.log('cleared checkpoints')
-                                        setShowClear(!showClear)
-                                        setCheckpoints([])
-                                    }}>
-                                    Clear
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            )
+                )
             }
+
+
             <NavigationControl />
             <GeolocateControl />
             <ScaleControl />

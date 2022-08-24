@@ -3,7 +3,7 @@
 import CourseMap from './components/Maps/CourseMap';
 import CreateMap from "./components/Maps/CreateMap";
 import CurrentCourse from "./components/Maps/CurrentCourse";
-import MintPage from './components/MintPage';
+import MintPage from './components/NFT/MintPage';
 
 function App() {
   return (

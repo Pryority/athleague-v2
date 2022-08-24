@@ -2,6 +2,7 @@
 // import CourseNav from './CourseNav/CourseNav';
 import CourseMap from './components/Maps/CourseMap';
 import CreateMap from "./components/Maps/CreateMap";
+import CurrentCourse from "./components/Maps/CurrentCourse";
 import MintPage from './components/MintPage';
 
 function App() {
@@ -12,7 +13,8 @@ function App() {
         {/* <OnboardCarousel /> */}
         {/* <CourseMap /> */}
         {/* <CreateMap /> */}
-        <MintPage />
+        <CurrentCourse />
+        {/* <MintPage /> */}
       </div>
     </div>
 

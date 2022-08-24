@@ -9,7 +9,7 @@ import trail from '../../assets/images/trail.png'
 import demo from '../../assets/images/demo.png'
 import SaveAsIcon from '@mui/icons-material/SaveAs';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
-import CourseMap from '../Maps/CourseMap';
+import CourseMap from './CourseMap';
 
 import {
     BrowserRouter as Router,
@@ -21,8 +21,6 @@ import {
 import { NavigationControl } from 'react-map-gl';
 import { GeolocateControl } from 'react-map-gl';
 import { ScaleControl } from 'react-map-gl';
-import WalletBalance from '../User/WalletBalance';
-import { positions } from '@mui/system';
 
 const TOKEN = process.env.REACT_APP_MAPBOX;
 
@@ -97,6 +95,41 @@ export default function CreateMap() {
     const handleSaveFormSubmit = () => {
         console.log('Saved Course: ', course)
     }
+
+
+    const options = {
+        enableHighAccuracy: true,
+        timeout: 5000,
+        maximumAge: 0
+    };
+    let id;
+    let target;
+
+    target = {
+        latitude: 0,
+        longitude: 0
+    };
+
+    function success(pos) {
+        const crd = pos.coords;
+
+        if (target.latitude === crd.latitude && target.longitude === crd.longitude) {
+            console.log('Congratulations, you reached the target');
+            navigator.geolocation.clearWatch(id);
+        }
+
+        console.log('Your current position is:');
+        console.log(`Latitude : ${crd.latitude}`);
+        console.log(`Longitude: ${crd.longitude}`);
+    }
+
+    function error(err) {
+        console.warn(`ERROR(${err.code}): ${err.message}`);
+    }
+
+    console.log(navigator.geolocation.getCurrentPosition(success, error, options))
+    id = navigator.geolocation.watchPosition(success, error, options);
+    console.log(id)
 
     useEffect(() => {
 
@@ -218,7 +251,6 @@ export default function CreateMap() {
             <div id='filter-menu' className='flex w-full px-2 space-x-2 justify-center items-center absolute top-2 z-2' >
 
                 <div className='flex flex-col space-y-2 w-2/3 md:w-2/3 lg:w-1/2 items-center justify-center bg-slate-200/90 p-3 rounded-xl border-2 border-slate-800/30 shadow'>
-                    <WalletBalance />
                     <div
                         className='flex flex-col w-full items-center justify-center'
                     >
@@ -349,29 +381,7 @@ export default function CreateMap() {
 
                 </div>
             </div>
-            {showIntro && (
-                <div id='intro' className='flex w-full justify-center items-center absolute h-full z-100 bg-black/80' >
-                    <div className='flex justify-center items-center h-full'>
-                        <div className='flex flex-col w-5/6 pb-4 space-y-4 justify-center items-center absolute bg-slate-200  rounded-xl border-2 shadow lg:scale-75'>
-                            <img src={demo} className='object-fit w-full p-1 rounded-xl flex lg:object-none lg:h-96' alt='trail' />
-                            <div className='flex flex-col w-full justify-center items-center space-y-1 p-2'>
-                                <p className='flex w-full justify-center items-center text-2xl text-center font-medium lg:text-4xl'>
-                                    Welcome to Athleague!
-                                </p>
-                                <p className='flex w-full justify-center items-center text-md text-center font-normal lg:text-xl'>
-                                    Create custom activity courses to establish easy goals for improving fitness.
-                                </p>
-                            </div>
-                            <div className='bg-blue-500 px-4 rounded-md text-xl text-slate-100 p-1 lg:p-2 lg:px-6'
-                                onClick={() => {
-                                    setShowIntro(!showIntro)
-                                }}>
-                                Next
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            )}
+
             {showSave && (
                 <div
                     id='save'

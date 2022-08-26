@@ -6,23 +6,14 @@ import RedoIcon from '@mui/icons-material/Redo';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import ClearIcon from '@mui/icons-material/Clear';
 import trail from '../../assets/images/trail.png'
-import demo from '../../assets/images/demo.png'
 import SaveAsIcon from '@mui/icons-material/SaveAs';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import CourseMap from '../Maps/CourseMap';
-
-import {
-    BrowserRouter as Router,
-    Routes,
-    Route,
-    Link
-} from "react-router-dom";
 
 import { NavigationControl } from 'react-map-gl';
 import { GeolocateControl } from 'react-map-gl';
 import { ScaleControl } from 'react-map-gl';
 import WalletBalance from '../User/WalletBalance';
-import { positions } from '@mui/system';
 
 const TOKEN = process.env.REACT_APP_MAPBOX;
 
@@ -42,7 +33,6 @@ export default function CreateMap() {
     const [checkpoints, setCheckpoints] = useState([]);
     const [isSelectedCP, setIsSelectedCP] = useState(null);
     const [courseName, setCourseName] = useState('');
-    const [showIntro, setShowIntro] = useState(true);
     const [showSave, setShowSave] = useState(false);
     const [showQuit, setShowQuit] = useState(false);
     const [canAddCP, setCanAddCP] = useState(true);
@@ -98,8 +88,6 @@ export default function CreateMap() {
         console.log('Saved Course: ', course)
     }
 
-    console.log(checkpoints)
-
     useEffect(() => {
 
     }, [])
@@ -131,7 +119,7 @@ export default function CreateMap() {
                                 latitude={marker.lat}
                                 longitude={marker.long}
                                 anchor="top"
-                                offset={[-5, -20]}
+                                offset={[0, -10]}
                                 scale={2}
                                 onClick={() => setCanAddCP(false)}
                             >
@@ -220,13 +208,13 @@ export default function CreateMap() {
             <div id='filter-menu' className='flex w-full px-2 space-x-2 justify-center items-center absolute top-2 z-2' >
 
                 <div className='flex flex-col space-y-2 w-2/3 md:w-2/3 lg:w-1/2 items-center justify-center bg-slate-200/90 p-3 rounded-xl border-2 border-slate-800/30 shadow'>
-                    <WalletBalance />
+                    {/* <WalletBalance /> */}
                     <div
                         className='flex flex-col w-full items-center justify-center'
                     >
-                        <div className='flex w-full space-x-2'>
+                        {/* <div className='flex w-full space-x-2'>
                             <input id='geocode-search' placeholder='Search by location' className='flex  flex-col w-full z-2 rounded-lg p-2 border-2 border-slate-400' />
-                        </div>
+                        </div> */}
 
                         <div className='flex flex-col w-full p-2 rounded-md items-center justify-center mt-2'>
                             <div className='flex space-x-8'>
@@ -351,29 +339,7 @@ export default function CreateMap() {
 
                 </div>
             </div>
-            {showIntro && (
-                <div id='intro' className='flex w-full justify-center items-center absolute h-full z-100 bg-black/80' >
-                    <div className='flex justify-center items-center h-full'>
-                        <div className='flex flex-col w-5/6 pb-4 space-y-4 justify-center items-center absolute bg-slate-200  rounded-xl border-2 shadow lg:scale-75'>
-                            <img src={demo} className='object-fit w-full p-1 rounded-xl flex lg:object-none lg:h-96' alt='trail' />
-                            <div className='flex flex-col w-full justify-center items-center space-y-1 p-2'>
-                                <p className='flex w-full justify-center items-center text-2xl text-center font-medium lg:text-4xl'>
-                                    Welcome to Athleague!
-                                </p>
-                                <p className='flex w-full justify-center items-center text-md text-center font-normal lg:text-xl'>
-                                    Create custom activity courses to establish easy goals for improving fitness.
-                                </p>
-                            </div>
-                            <div className='bg-blue-500 px-4 rounded-md text-xl text-slate-100 p-1 lg:p-2 lg:px-6'
-                                onClick={() => {
-                                    setShowIntro(!showIntro)
-                                }}>
-                                Next
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            )}
+
             {showSave && (
                 <div
                     id='save'
@@ -392,7 +358,6 @@ export default function CreateMap() {
                                         onClick={() => {
                                             setShowSave(!showSave)
                                             console.log('exiting')
-
                                         }}
                                     >
                                         <ClearIcon />
@@ -422,18 +387,18 @@ export default function CreateMap() {
                                 </div>
                             </div>
                             {/* SAVE BUTTON */}
-                            <Link to='/create'>
-                                <div className='flex  items-center space-x-2 bg-green-500 hover:bg-green-600 rounded-md text-xl font-bold text-slate-100 p-1 px-8 lg:p-2 lg:px-6'
-                                    onClick={() => {
-                                        console.log('course saved')
-                                        setShowSave(!showSave)
-                                        console.log(course.checkpoints.length)
-                                        console.log(course.title)
-                                        handleSaveFormSubmit()
-                                    }}>
-                                    <SaveAsIcon />
-                                </div>
-                            </Link>
+
+                            <div className='flex  items-center space-x-2 bg-green-500 hover:bg-green-600 rounded-md text-xl font-bold text-slate-100 p-1 px-8 lg:p-2 lg:px-6'
+                                onClick={() => {
+                                    console.log('course saved')
+                                    setShowSave(!showSave)
+                                    console.log(course.checkpoints.length)
+                                    console.log(course.title)
+                                    handleSaveFormSubmit()
+                                }}>
+                                <SaveAsIcon />
+                            </div>
+
 
                         </form>
                     </div>

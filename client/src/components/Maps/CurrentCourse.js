@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import Map, { Marker, Popup } from 'react-map-gl';
+import KeyboardReturnIcon from '@mui/icons-material/KeyboardReturn';
 import UndoIcon from '@mui/icons-material/Undo';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import ClearIcon from '@mui/icons-material/Clear';
@@ -9,7 +10,7 @@ import { GeolocateControl } from 'react-map-gl';
 import { ScaleControl } from 'react-map-gl';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { CompassCalibration, CompassCalibrationSharp } from '@mui/icons-material';
-
+import { Link } from 'react-router-dom';
 const TOKEN = process.env.REACT_APP_MAPBOX;
 const cps = [{
     "lat": 49.27955108537651,
@@ -188,12 +189,19 @@ export default function CreateMap() {
                 })
             }
 
-            <div id='filter-menu' className='flex w-full justify-center items-center absolute top-2 z-2' >
+            <div id='upper-HUD' className='flex w-full px-2 space-x-2 justify-start items-center absolute top-2 z-2' >
+                <div>
+                    <Link to='/' className='flex w-10 h-10 bg-slate-700 rounded-full items-center justify-center opacity-90 border-2 border-slate-100/30'
+                        onClick={() => setShowQuit(true)}
+                    >
+                        <KeyboardReturnIcon style={{ color: '#ffffff' }} />
+                    </Link>
+                </div>
                 <div
                     className='flex flex-col w-full mx-2 items-start justify-center'
                 >
-                    <div className='flex flex-col w-4/5 md:w-2/5 lg:w-1/4 bg-slate-200/90 border-2 border-slate-100 rounded-md'>
-                        <div className='flex flex-row w-full rounded-md items-center justify-center'>
+                    <div className='flex flex-col space-y-2 w-4/6 md:w-2/5 lg:w-1/3 items-center justify-center bg-slate-200/90 rounded-xl border-2 border-slate-800/30 shadow'>
+                        {/* <div className='flex flex-row w-full rounded-md items-center justify-center'>
                             <div className='flex justify-center items-center p-1 w-1/6'>
                                 <p className='text-slate-600 p-[0.2] px-2  rounded-full font-bold'>Center:</p>
                             </div>
@@ -206,12 +214,12 @@ export default function CreateMap() {
                                 </div>
                             </div>
                         </div>
-                        <div className='border-b border-slate-300 flex w-full' />
+                        <div className='border-b border-slate-300 flex w-full' /> */}
 
                         <div className='flex flex-row w-full rounded-md items-center justify-center p-1'>
                             {(currentPosition.latitude !== 0) ? (
-                                <div className='flex justify-center items-center p-1'>
-                                    <p className='text-white p-[0.2] px-3 bg-green-600/90 rounded-full font-bold'>Live</p>
+                                <div className='flex w-1/4 justify-center items-center '>
+                                    <p className='text-white p-[0.2] px-2 bg-green-600/90 rounded-full font-bold'>Live</p>
                                 </div>
                             )
                                 :
@@ -222,10 +230,10 @@ export default function CreateMap() {
 
                             <div className='flex w-full justify-between items-center'>
                                 <div className='flex w-1/2 justify-center'>
-                                    <p className='text-start'>Lat: <b>{currentPosition.latitude.toFixed(4)}</b></p>
+                                    <p className='text-start text-[10px]'>Lat: <b>{currentPosition.latitude.toFixed(4)}</b></p>
                                 </div>
                                 <div className='flex w-1/2 justify-center'>
-                                    <p className='text-start'>Long: <b>{currentPosition.longitude.toFixed(4)}</b></p>
+                                    <p className='text-start text-[10px]'>Long: <b>{currentPosition.longitude.toFixed(4)}</b></p>
                                 </div>
                             </div>
                         </div>

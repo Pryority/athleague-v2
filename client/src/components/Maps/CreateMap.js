@@ -406,18 +406,19 @@ export default function CreateMap() {
                 <div
                     id='save'
                     className='flex w-full justify-center items-center relative h-full z-100 bg-black/80'
+                    onClick={() => setShowQuit(false)}
                 >
                     <div className='flex justify-center items-center h-full'>
                         <form id='save-course-form'
                             className='flex flex-col w-5/6 pb-4 space-y-4 justify-center items-center absolute bg-slate-200  rounded-xl border-2 p-2 shadow lg:scale-75'>
                             <div className='flex flex-col w-full justify-center items-center space-y-1 p-2'>
-                                <div className='flex w-full justify-between items-center mb-4'>
+                                <div className='flex w-full justify-center items-center mb-4'>
                                     <p className='text-2xl text-center font-medium lg:text-4xl'>
-                                        Are you sure you want to quit Course Creation?
+                                        Sure you want to quit?
                                     </p>
                                 </div>
                                 <p className='flex w-full justify-center items-center text-md text-center font-normal lg:text-xl'>
-                                    Your course's checkpoints will be lost if you quit.
+                                    Your course creation progress will be lost.
                                 </p>
                             </div>
                             <div className='flex w-2/3 space-x-8'>

@@ -16,21 +16,19 @@ import Home from './components/Home/Home'
 function App() {
   const [showIntro, setShowIntro] = useState(false);
   return (
-    <div id='map' className="h-screen">
-      <div className='flex flex-col w-full h-full justify-center items-center '>
-        <BrowserRouter>
-          {/* <CourseNav /> */}
-          {/* <OnboardCarousel /> */}
-          {/* <CourseMap /> */}
-          {/* <CreateMap /> */}
-          <Routes>
-            <Route path='/' element={<Home />} />
-            <Route path='/current' element={<CurrentCourse />} />
-            <Route path='/create' element={<CreateMap />} />
-          </Routes>
-          {/* <MintPage /> */}
-        </BrowserRouter>
-      </div>
+    <div id='map' className="flex h-screen relative">
+      <BrowserRouter>
+        {/* <CourseNav /> */}
+        {/* <OnboardCarousel /> */}
+        {/* <CourseMap /> */}
+        {/* <CreateMap /> */}
+        <Routes>
+          <Route path='/' element={<Home />} />
+          <Route path='/current' element={<CurrentCourse />} />
+          <Route path='/create' element={<CreateMap />} />
+        </Routes>
+        {/* <MintPage /> */}
+      </BrowserRouter>
     </div>
   );
 

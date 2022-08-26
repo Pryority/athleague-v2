@@ -16,7 +16,7 @@ import Home from './components/Home/Home'
 function App() {
   const [showIntro, setShowIntro] = useState(false);
   return (
-    <div id='map' className="flex h-screen relative">
+    <div id='map' className="flex h-screen relative justify-center">
       <BrowserRouter>
         {/* <CourseNav /> */}
         {/* <OnboardCarousel /> */}

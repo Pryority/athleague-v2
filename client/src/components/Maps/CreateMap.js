@@ -1,19 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react'
 import Map, { Marker, Popup } from 'react-map-gl';
-import axios from 'axios';
 import UndoIcon from '@mui/icons-material/Undo';
-import RedoIcon from '@mui/icons-material/Redo';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import ClearIcon from '@mui/icons-material/Clear';
-import trail from '../../assets/images/trail.png'
 import SaveAsIcon from '@mui/icons-material/SaveAs';
-import ExitToAppIcon from '@mui/icons-material/ExitToApp';
-import CourseMap from '../Maps/CourseMap';
 import KeyboardReturnIcon from '@mui/icons-material/KeyboardReturn';
 import { NavigationControl } from 'react-map-gl';
 import { GeolocateControl } from 'react-map-gl';
 import { ScaleControl } from 'react-map-gl';
-import WalletBalance from '../User/WalletBalance';
 import { Link } from 'react-router-dom'
 
 const TOKEN = process.env.REACT_APP_MAPBOX;
@@ -33,7 +27,6 @@ export default function CreateMap() {
     })
     const [checkpoints, setCheckpoints] = useState([]);
     const [isSelectedCP, setIsSelectedCP] = useState(null);
-    const [courseName, setCourseName] = useState('');
     const [showSave, setShowSave] = useState(false);
     const [showQuit, setShowQuit] = useState(false);
     const [canAddCP, setCanAddCP] = useState(true);
@@ -50,24 +43,6 @@ export default function CreateMap() {
         })
         console.log(`Current Course ID: ${isSelectedCP}`)
         console.log(`Course Coordinates: \n Lat-${lat} Long-${long}`)
-    }
-
-    const saveCourse = async (lat, lng) => {
-        try {
-            const res = await axios.post('/api/courses', {
-                "username": "<USERNAME>",
-                "title": "<TITLE>",
-                "type": "<TYPE>",
-                "desc": "<DESCRIPTION>",
-                "rating": 5,
-                "lat": lat,
-                "long": lng
-            })
-            console.log('🟢 CHECKPOINTS:', res.data)
-            // setCourses(res.data)
-        } catch (err) {
-            console.log('<><><><><><><>', err, '<><><><><><><>')
-        }
     }
 
     const handleAddMarker = (loc) => {
@@ -213,7 +188,7 @@ export default function CreateMap() {
                     <KeyboardReturnIcon style={{ color: '#ffffff' }} />
                 </div>
 
-                <div className='flex flex-col space-y-2 w-3/5 md:w-2/5 lg:w-1/3 items-center justify-center bg-slate-200/90 rounded-xl border-2 border-slate-800/30 shadow'>
+                <div className='flex flex-col space-y-2 w-3/5 md:w-2/5 lg:w-1/3 items-center justify-center bg-slate-200/90 rounded-xl border-2 border-slate-800/30 shadow animate-fade-in-down'>
                     {/* <WalletBalance /> */}
                     <div
                         className='flex flex-col w-full items-center justify-center'
@@ -229,8 +204,8 @@ export default function CreateMap() {
 
                 </div>
             </div >
-            <div id='HUD' className='flex flex-col space-y-2 w-full justify-around items-center absolute bottom-20' >
-                <div className='flex flex-wrap justify-center gap-2 w-5/6 p-2'>
+            <div id='HUD' className='flex flex-col space-y-2 w-full justify-around items-center absolute bottom-20 animate-slow-fade-in-up' >
+                <div id='checkpoints-array' className='flex flex-wrap justify-center gap-2 w-5/6 p-2'>
                     {checkpoints.map((checkpoint, index) => (
                         // <div className='rounded-full border shadow w-8 h-8 bg-slate-500' />
                         <>
@@ -274,7 +249,7 @@ export default function CreateMap() {
                     ))}
                     {/* </div> */}
                 </div>
-                <div id='checkpoints-array' className='flex w-full md:w-2/3 lg:w-1/2 justify-around space-x-4 items-center'>
+                <div id='bottom-HUD' className='flex w-full md:w-2/3 lg:w-1/2 justify-around space-x-4 items-center'>
                     <div id='undo-redo' className='flex w-1/3 justify-center'>
                         <div className='flex w-full justify-center'>
                             {
@@ -325,15 +300,22 @@ export default function CreateMap() {
                         </div>
                     }
 
-
                     <div className='flex w-1/3 justify-center'>
-                        <div className='flex flex-col w-12 h-12 justify-center items-center bg-red-200 p-3 rounded-xl border-2 border-red-300 shadow-md text-2xl font-black'
-                            onClick={() => setShowClear(true)}
-                        >
-                            <DeleteForeverIcon style={{ fill: '#b02727' }} />
-                        </div>
+                        {(checkpoints.length === 0) ? (
+                            <div className='flex flex-col w-12 h-12 justify-center items-center bg-red-200 p-3 rounded-xl border-2 border-red-300 shadow-md text-2xl font-black opacity-50'
+                                onClick={() => setShowClear(true)}
+                            >
+                                <DeleteForeverIcon style={{ fill: '#b02727' }} />
+                            </div>
+                        ) : (
+                            <div className='flex flex-col w-12 h-12 justify-center items-center bg-red-200 p-3 rounded-xl border-2 border-red-300 shadow-md text-2xl font-black'
+                                onClick={() => setShowClear(true)}
+                            >
+                                <DeleteForeverIcon style={{ fill: '#b02727' }} />
+                            </div>
+                        )
+                        }
                     </div>
-
                 </div>
             </div>
 
